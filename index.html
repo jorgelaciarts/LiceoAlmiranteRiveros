@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liceo Almirante Riveros | Conchalí</title>
+<meta name="description" content="Sitio institucional del Liceo Almirante Riveros, Conchalí. Noticias, galería, calendario de evaluaciones, cuerpo docente y documentos institucionales.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --navy-deep:#0B2340;
+    --navy-mid:#123A5C;
+    --navy-soft:#1D4A73;
+    --brass:#C9A24B;
+    --brass-light:#E6C878;
+    --teal:#2F6B5E;
+    --paper:#F4F1E8;
+    --paper-white:#FBF9F4;
+    --ink:#1B2430;
+    --ink-soft:#525B68;
+    --line:#D9D2BE;
+    --radius:2px;
+    --maxw:1180px;
+    --shadow-card:0 1px 2px rgba(11,35,64,.06), 0 8px 24px -12px rgba(11,35,64,.18);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+  body{
+    margin:0;
+    background:var(--paper-white);
+    color:var(--ink);
+    font-family:'Public Sans', system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', Georgia, serif;
+    color:var(--navy-deep);
+    margin:0 0 .5em;
+    line-height:1.15;
+    font-weight:600;
+  }
+  p{margin:0 0 1em;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .container{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:'Public Sans',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:.72rem;
+    font-weight:700;
+    color:var(--brass);
+    display:flex;
+    align-items:center;
+    gap:.6em;
+    margin-bottom:.9em;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:2px;
+    background:var(--brass);
+    display:inline-block;
+  }
+  .section{padding:88px 0;}
+  .section-head{max-width:640px; margin-bottom:48px;}
+  .section-head p{color:var(--ink-soft); font-size:1.05rem;}
+  section[id]{scroll-margin-top:88px;}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:.55em;
+    font-family:'Public Sans',sans-serif;
+    font-weight:700;
+    font-size:.92rem;
+    letter-spacing:.02em;
+    padding:.85em 1.6em;
+    border-radius:var(--radius);
+    border:1.5px solid transparent;
+    cursor:pointer;
+    text-decoration:none;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-brass{ background:var(--brass); color:var(--navy-deep); }
+  .btn-brass:hover{ background:var(--brass-light); }
+  .btn-outline{ border-color:rgba(255,255,255,.55); color:#fff; }
+  .btn-outline:hover{ background:rgba(255,255,255,.12); }
+  .btn-navy{ background:var(--navy-deep); color:#fff; }
+  .btn-navy:hover{ background:var(--navy-mid); }
+
+  .btn:focus-visible, a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible{
+    outline:3px solid var(--brass);
+    outline-offset:2px;
+  }
+
+  .skip-link{
+    position:absolute; left:-999px; top:0;
+    background:var(--brass); color:var(--navy-deep);
+    padding:12px 18px; z-index:999; font-weight:700; text-decoration:none;
+  }
+  .skip-link:focus{ left:12px; top:12px; }
+
+  /* ============ TOP BAR ============ */
+  .topbar{
+    background:var(--navy-deep);
+    color:#CBD8E6;
+    font-size:.8rem;
+  }
+  .topbar .container{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top:8px; padding-bottom:8px; gap:16px; flex-wrap:wrap;
+  }
+  .topbar-info{display:flex; gap:20px; flex-wrap:wrap;}
+  .topbar-info span{display:inline-flex; align-items:center; gap:6px;}
+  .topbar-social{display:flex; gap:12px;}
+  .topbar-social a{opacity:.85; transition:opacity .15s;}
+  .topbar-social a:hover{opacity:1;}
+
+  /* ============ HEADER / NAV ============ */
+  header.site{
+    position:sticky; top:0; z-index:60;
+    background:var(--navy-mid);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 0;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; }
+  .brand-mark{ width:42px; height:42px; flex-shrink:0; }
+  .brand-text{ line-height:1.2; }
+  .brand-text strong{ display:block; font-family:'Fraunces',serif; font-size:1.05rem; font-weight:700; }
+  .brand-text small{ display:block; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--brass-light); }
+
+  nav.primary{ display:flex; align-items:center; gap:6px; }
+  nav.primary a{
+    color:#E7ECF2; text-decoration:none; font-weight:600; font-size:.9rem;
+    padding:10px 12px; border-radius:var(--radius); position:relative;
+  }
+  nav.primary a:hover{ color:#fff; }
+  nav.primary a.active{ color:var(--brass-light); }
+
+  .nav-cta{ display:flex; align-items:center; gap:10px; }
+  .menu-toggle{
+    display:none; background:none; border:1.5px solid rgba(255,255,255,.4); color:#fff;
+    width:42px; height:42px; border-radius:var(--radius); cursor:pointer;
+  }
+
+  @media (max-width: 920px){
+    nav.primary{
+      position:fixed; inset:64px 0 0 0; background:var(--navy-deep);
+      flex-direction:column; align-items:stretch; padding:12px;
+      transform:translateX(100%); transition:transform .25s ease;
+      overflow-y:auto;
+    }
+    nav.primary.open{ transform:translateX(0); }
+    nav.primary a{ padding:16px 12px; font-size:1.05rem; border-bottom:1px solid rgba(255,255,255,.08); }
+    .menu-toggle{ display:block; }
+    .nav-cta .btn-brass{ display:none; }
+  }
+
+  /* ============ ALERT RIBBON ============ */
+  .ribbon{
+    background:var(--brass); color:var(--navy-deep);
+    font-weight:700; font-size:.85rem;
+  }
+  .ribbon .container{ display:flex; align-items:center; gap:10px; padding:9px 24px; }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative; overflow:hidden;
+    background:radial-gradient(1100px 600px at 82% -10%, var(--navy-soft), var(--navy-deep) 60%);
+    color:#fff; padding:96px 0 0;
+  }
+  .hero-compass{
+    position:absolute; right:-120px; top:-80px; width:560px; height:560px;
+    opacity:.15; animation:spin 120s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .hero-inner{ position:relative; display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center; }
+  .hero-eyebrow{
+    color:var(--brass-light); text-transform:uppercase; letter-spacing:.16em;
+    font-size:.75rem; font-weight:700; margin-bottom:18px; display:flex; gap:.6em; align-items:center;
+  }
+  .hero-eyebrow::before{ content:""; width:26px; height:2px; background:var(--brass-light); }
+  .hero h1{ color:#fff; font-size:clamp(2.2rem, 4vw, 3.4rem); max-width:14ch; }
+  .hero .lede{ color:#D9E2ED; font-size:1.15rem; max-width:46ch; }
+  .hero-actions{ display:flex; gap:14px; margin:30px 0 44px; flex-wrap:wrap; }
+
+  .hero-stats{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    border-top:1px solid rgba(255,255,255,.18);
+    padding:26px 0 40px;
+  }
+  .hero-stats div{ padding-right:20px; }
+  .hero-stats strong{ display:block; font-family:'Fraunces',serif; font-size:1.6rem; color:var(--brass-light); }
+  .hero-stats span{ font-size:.82rem; color:#B9C6D6; }
+
+  .hero-card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:var(--radius);
+    padding:26px;
+    backdrop-filter:blur(2px);
+  }
+  .hero-card h3{ color:#fff; font-size:1.05rem; }
+  .hero-card ul{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+  .hero-card li a{
+    display:flex; align-items:center; justify-content:space-between;
+    text-decoration:none; color:#E7ECF2; font-size:.92rem; font-weight:600;
+    padding:12px 14px; background:rgba(255,255,255,.05); border-radius:var(--radius);
+    border:1px solid rgba(255,255,255,.08);
+    transition:background .15s, border-color .15s;
+  }
+  .hero-card li a:hover{ background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.25); }
+
+  @media (max-width: 860px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .hero-stats{ grid-template-columns:1fr 1fr; row-gap:20px; }
+  }
+
+  /* wave divider */
+  .wave{ display:block; width:100%; line-height:0; }
+  .wave svg{ width:100%; height:64px; display:block; }
+
+  /* ============ QUICK LINKS ============ */
+  .quicklinks{ background:var(--paper); padding:56px 0; }
+  .quick-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+  .quick-card{
+    background:var(--paper-white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 18px; text-decoration:none; color:var(--ink);
+    display:flex; flex-direction:column; gap:10px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .quick-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-card); border-color:var(--brass); }
+  .quick-card .ico{ width:30px; height:30px; color:var(--teal); }
+  .quick-card strong{ font-family:'Fraunces',serif; font-size:1rem; color:var(--navy-deep); }
+  .quick-card span{ font-size:.82rem; color:var(--ink-soft); }
+  @media (max-width:920px){ .quick-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:520px){ .quick-grid{ grid-template-columns:1fr; } }
+
+  /* ============ NOSOTROS ============ */
+  .about-grid{ display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:start; }
+  .about-grid p{ color:var(--ink-soft); }
+  .pillars{ display:grid; gap:18px; }
+  .pillar{
+    display:flex; gap:16px; background:var(--paper); border-left:3px solid var(--teal);
+    padding:18px 20px; border-radius:var(--radius);
+  }
+  .pillar h4{ font-size:1rem; margin-bottom:4px; }
+  .pillar p{ margin:0; font-size:.9rem; color:var(--ink-soft); }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; } }
+
+  /* ============ NOTICIAS ============ */
+  .news-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+  .news-card{
+    background:var(--paper-white); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; display:flex; flex-direction:column;
+    box-shadow:var(--shadow-card);
+  }
+  .news-thumb{
+    height:150px; background:linear-gradient(135deg, var(--navy-mid), var(--teal));
+    position:relative; display:flex; align-items:flex-end; padding:14px;
+  }
+  .news-thumb span{
+    background:var(--brass); color:var(--navy-deep); font-weight:800; font-size:.7rem;
+    text-transform:uppercase; letter-spacing:.08em; padding:5px 10px; border-radius:2px;
+  }
+  .news-body{ padding:20px 22px 24px; display:flex; flex-direction:column; gap:10px; flex:1; }
+  .news-date{ font-size:.75rem; color:var(--ink-soft); font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+  .news-body h3{ font-size:1.08rem; }
+  .news-body p{ color:var(--ink-soft); font-size:.92rem; margin:0; flex:1; }
+  .news-link{ font-size:.86rem; font-weight:700; color:var(--teal); text-decoration:none; margin-top:6px; }
+  .news-link:hover{ text-decoration:underline; }
+  @media (max-width:920px){ .news-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:620px){ .news-grid{ grid-template-columns:1fr; } }
+
+  /* ============ GALERIA ============ */
+  .gallery-controls{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px; }
+  .chip{
+    border:1.5px solid var(--line); background:var(--paper-white); color:var(--ink-soft);
+    padding:8px 16px; border-radius:999px; font-size:.84rem; font-weight:700; cursor:pointer;
+  }
+  .chip.active{ background:var(--navy-deep); color:#fff; border-color:var(--navy-deep); }
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+  }
+  .gallery-item{
+    position:relative; aspect-ratio:4/3; border-radius:var(--radius); overflow:hidden;
+    cursor:pointer; border:1px solid var(--line);
+    background:linear-gradient(135deg, var(--navy-soft), var(--teal));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .gallery-item svg{ width:32px; height:32px; color:rgba(255,255,255,.55); }
+  .gallery-item figcaption{
+    position:absolute; left:0; right:0; bottom:0;
+    background:linear-gradient(to top, rgba(11,35,64,.88), transparent);
+    color:#fff; font-size:.78rem; font-weight:600; padding:22px 10px 10px;
+  }
+  @media (max-width:920px){ .gallery-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:620px){ .gallery-grid{ grid-template-columns:repeat(2,1fr); } }
+
+  .lightbox{
+    position:fixed; inset:0; background:rgba(11,15,20,.92); z-index:200;
+    display:none; align-items:center; justify-content:center; padding:30px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox-box{
+    max-width:640px; width:100%; background:var(--navy-deep); border-radius:4px; overflow:hidden; color:#fff;
+  }
+  .lightbox-media{
+    height:320px; background:linear-gradient(135deg, var(--navy-soft), var(--teal));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-media svg{ width:52px; height:52px; color:rgba(255,255,255,.5); }
+  .lightbox-info{ padding:20px 24px; }
+  .lightbox-close{
+    position:absolute; top:24px; right:30px; background:none; border:none; color:#fff;
+    font-size:1.8rem; cursor:pointer; line-height:1;
+  }
+
+  /* ============ CALENDARIO ============ */
+  .calendar-panel{
+    background:var(--navy-deep); border-radius:6px; padding:30px; color:#fff;
+  }
+  .calendar-toolbar{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:20px; }
+  .calendar-toolbar label{ font-size:.82rem; color:var(--brass-light); font-weight:700; margin-right:8px; }
+  select#filtroCurso{
+    background:var(--navy-mid); color:#fff; border:1px solid rgba(255,255,255,.25);
+    padding:9px 14px; border-radius:4px; font-size:.9rem; font-family:inherit;
+  }
+  table.evals{ width:100%; border-collapse:collapse; font-size:.9rem; }
+  table.evals thead th{
+    text-align:left; padding:12px 14px; color:var(--brass-light);
+    text-transform:uppercase; letter-spacing:.06em; font-size:.72rem;
+    border-bottom:1px solid rgba(255,255,255,.25);
+  }
+  table.evals td{ padding:13px 14px; border-bottom:1px solid rgba(255,255,255,.1); }
+  table.evals tr:hover td{ background:rgba(255,255,255,.04); }
+  .badge-curso{
+    background:rgba(201,162,75,.18); color:var(--brass-light); font-weight:700; font-size:.74rem;
+    padding:3px 9px; border-radius:999px; display:inline-block;
+  }
+  .cal-empty{ padding:24px; text-align:center; color:#B9C6D6; font-size:.9rem; }
+
+  /* ============ PROFESORES ============ */
+  .staff-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .staff-card{
+    background:var(--paper-white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px 18px; text-align:center;
+  }
+  .staff-avatar{
+    width:64px; height:64px; border-radius:50%; margin:0 auto 14px;
+    background:var(--navy-mid); color:var(--brass-light); display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:1.2rem;
+  }
+  .staff-card h4{ font-size:.98rem; margin-bottom:2px; }
+  .staff-role{ color:var(--teal); font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px; }
+  .staff-dept{ color:var(--ink-soft); font-size:.82rem; }
+  @media (max-width:920px){ .staff-grid{ grid-template-columns:repeat(2,1fr); } }
+
+  /* ============ DOCUMENTOS ============ */
+  .docs-list{ display:grid; gap:12px; }
+  .doc-row{
+    display:flex; align-items:center; gap:16px; background:var(--paper-white);
+    border:1px solid var(--line); border-radius:var(--radius); padding:16px 20px;
+  }
+  .doc-ico{
+    width:40px; height:40px; flex-shrink:0; background:var(--navy-deep); color:var(--brass-light);
+    display:flex; align-items:center; justify-content:center; border-radius:4px;
+  }
+  .doc-meta{ flex:1; }
+  .doc-meta strong{ display:block; font-size:.95rem; }
+  .doc-meta span{ font-size:.78rem; color:var(--ink-soft); }
+  .doc-dl{
+    font-size:.82rem; font-weight:700; color:var(--teal); text-decoration:none;
+    border:1.5px solid var(--teal); padding:8px 16px; border-radius:4px; white-space:nowrap;
+  }
+  .doc-dl:hover{ background:var(--teal); color:#fff; }
+
+  /* ============ SELLO ARTISTICO ============ */
+  .sello{ background:var(--teal); color:#fff; }
+  .sello h2{ color:#fff; }
+  .sello .section-head p{ color:#DCEDE8; }
+  .taller-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .taller{
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+    border-radius:var(--radius); padding:20px; font-size:.9rem; font-weight:600;
+  }
+  @media (max-width:860px){ .taller-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* ============ FAQ ============ */
+  .faq-item{ border-bottom:1px solid var(--line); }
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    padding:20px 0; font-family:'Fraunces',serif; font-size:1.02rem; color:var(--navy-deep);
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+  }
+  .faq-q .plus{ transition:transform .2s ease; flex-shrink:0; color:var(--brass); font-size:1.3rem; }
+  .faq-item.open .plus{ transform:rotate(45deg); }
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height .25s ease; }
+  .faq-a p{ padding-bottom:20px; color:var(--ink-soft); margin:0; font-size:.92rem; }
+
+  /* ============ REDES ============ */
+  .social-band{ background:var(--navy-deep); color:#fff; }
+  .social-band h2{ color:#fff; }
+  .social-row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .social-tile{
+    flex:1; min-width:200px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
+    border-radius:var(--radius); padding:22px; text-decoration:none; color:#fff;
+    display:flex; align-items:center; gap:14px; transition:background .15s;
+  }
+  .social-tile:hover{ background:rgba(255,255,255,.12); }
+  .social-tile .ico{ width:30px; height:30px; color:var(--brass-light); flex-shrink:0; }
+  .social-tile strong{ display:block; font-size:.95rem; }
+  .social-tile span{ font-size:.78rem; color:#B9C6D6; }
+
+  /* ============ CONTACTO ============ */
+  .contact-grid{ display:grid; grid-template-columns:.9fr 1.1fr; gap:40px; }
+  .contact-info{ display:grid; gap:18px; align-content:start; }
+  .contact-info .item{ display:flex; gap:14px; }
+  .contact-info .ico{ width:22px; height:22px; color:var(--teal); flex-shrink:0; margin-top:2px; }
+  .contact-info strong{ display:block; font-size:.92rem; }
+  .contact-info span{ font-size:.88rem; color:var(--ink-soft); }
+  .map-wrap{ border-radius:var(--radius); overflow:hidden; border:1px solid var(--line); margin-top:8px; }
+  .map-wrap iframe{ width:100%; height:220px; border:0; display:block; }
+
+  form.contact-form{ display:grid; gap:14px; }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .contact-form label{ font-size:.8rem; font-weight:700; color:var(--navy-deep); display:block; margin-bottom:6px; }
+  .contact-form input, .contact-form select, .contact-form textarea{
+    width:100%; border:1.5px solid var(--line); border-radius:4px; padding:11px 13px;
+    font-family:inherit; font-size:.92rem; background:var(--paper-white); color:var(--ink);
+  }
+  .contact-form textarea{ resize:vertical; min-height:110px; }
+  @media (max-width:860px){ .contact-grid{ grid-template-columns:1fr; } .form-row{ grid-template-columns:1fr; } }
+
+  /* ============ FOOTER ============ */
+  footer.site{ background:#081930; color:#9FB0C4; padding:56px 0 26px; }
+  .footer-grid{ display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:36px; margin-bottom:40px; }
+  .footer-grid h4{ color:#fff; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:16px; }
+  .footer-grid ul{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+  .footer-grid a{ color:#9FB0C4; text-decoration:none; font-size:.88rem; }
+  .footer-grid a:hover{ color:#fff; }
+  .footer-brand p{ font-size:.85rem; max-width:32ch; }
+  .footer-bottom{
+    border-top:1px solid rgba(255,255,255,.1); padding-top:22px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:.78rem;
+  }
+  @media (max-width:860px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .footer-grid{ grid-template-columns:1fr; } }
+
+  /* reveal on scroll */
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* back to top */
+  .to-top{
+    position:fixed; right:22px; bottom:22px; width:46px; height:46px; border-radius:50%;
+    background:var(--brass); color:var(--navy-deep); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(11,35,64,.35);
+    opacity:0; pointer-events:none; transition:opacity .2s; z-index:80;
+  }
+  .to-top.show{ opacity:1; pointer-events:auto; }
+
+  @media (max-width:920px){
+    .about-grid{ grid-template-columns:1fr; }
+    .news-grid{ grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Saltar al contenido principal</a>
+
+<!-- ============ TOP BAR ============ -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-info">
+      <span>📍 Ernesto Ried 5730, Conchalí</span>
+      <span>📞 +56 2 2623 2223</span>
+      <span>✉️ liceo.almiranteriveros@coresam.cl</span>
+    </div>
+    <div class="topbar-social" aria-label="Redes sociales">
+      <a href="#" aria-label="Facebook">FB</a>
+      <a href="#" aria-label="Instagram">IG</a>
+      <a href="#" aria-label="YouTube">YT</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site">
+  <div class="container nav-row">
+    <a href="#inicio" class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="22" stroke="#E6C878" stroke-width="2"/>
+        <path d="M24 6 L27 22 L24 24 L21 22 Z" fill="#E6C878"/>
+        <path d="M24 42 L21 26 L24 24 L27 26 Z" fill="#5C7A96"/>
+        <path d="M6 24 L22 21 L24 24 L22 27 Z" fill="#5C7A96"/>
+        <path d="M42 24 L26 27 L24 24 L26 21 Z" fill="#5C7A96"/>
+        <circle cx="24" cy="24" r="3" fill="#fff"/>
+      </svg>
+      <span class="brand-text">
+        <strong>Liceo Almirante Riveros</strong>
+        <small>Conchalí · Región Metropolitana</small>
+      </span>
+    </a>
+
+    <nav class="primary" id="primaryNav" aria-label="Navegación principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#noticias">Noticias</a>
+      <a href="#galeria">Galería</a>
+      <a href="#calendario">Calendario</a>
+      <a href="#profesores">Profesores</a>
+      <a href="#documentos">Documentos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a href="#contacto" class="btn btn-brass">Postulaciones</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="primaryNav">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ALERT RIBBON ============ -->
+<div class="ribbon">
+  <div class="container">
+    <span>📣</span>
+    <span>Reunión de apoderados: martes 15 de julio, 18:30 hrs, Salón Multiuso. Reemplaza este aviso por la información vigente.</span>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio">
+  <svg class="hero-compass" viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="100" cy="100" r="96" stroke="#E6C878" stroke-width="1"/>
+    <circle cx="100" cy="100" r="70" stroke="#E6C878" stroke-width="1"/>
+    <path d="M100 4 L108 96 L100 100 L92 96 Z" fill="#E6C878"/>
+    <path d="M100 196 L92 104 L100 100 L108 104 Z" fill="#E6C878"/>
+    <path d="M4 100 L96 92 L100 100 L96 108 Z" fill="#E6C878"/>
+    <path d="M196 100 L104 108 L100 100 L104 92 Z" fill="#E6C878"/>
+  </svg>
+  <div class="container hero-inner">
+    <div class="reveal in">
+      <div class="hero-eyebrow">Establecimiento municipal · Científico-humanista</div>
+      <h1>Formación integral con rumbo propio, desde 2007 al servicio de Conchalí</h1>
+      <p class="lede">Educación laica, gratuita y de calidad para estudiantes de Prekínder a 4° Medio, con un sello artístico distintivo y foco en el pensamiento crítico y la conciencia medioambiental.</p>
+      <div class="hero-actions">
+        <a href="#noticias" class="btn btn-brass">Ver noticias del liceo</a>
+        <a href="#nosotros" class="btn btn-outline">Conocer el proyecto educativo</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>Prek. – 4° Medio</strong><span>Niveles impartidos</span></div>
+        <div><strong>Jornada diurna</strong><span>Régimen JEC</span></div>
+        <div><strong>CORESAM</strong><span>Dependencia municipal</span></div>
+      </div>
+    </div>
+
+    <div class="hero-card reveal in">
+      <h3>Accesos directos</h3>
+      <ul>
+        <li><a href="#galeria">Galería institucional <span>→</span></a></li>
+        <li><a href="#calendario">Calendario de evaluaciones <span>→</span></a></li>
+        <li><a href="#documentos">Documentos y protocolos <span>→</span></a></li>
+        <li><a href="#profesores">Cuerpo docente <span>→</span></a></li>
+        <li><a href="#contacto">Postulaciones y contacto <span>→</span></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,32 C150,60 350,0 600,28 C850,56 1050,4 1200,30 L1200,60 L0,60 Z" fill="#F4F1E8"/></svg>
+</div>
+
+<!-- ============ QUICK LINKS ============ -->
+<section class="quicklinks">
+  <div class="container quick-grid">
+    <a href="#galeria" class="quick-card">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
+      <strong>Galería</strong>
+      <span>Fotografías de actos, deportes y talleres</span>
+    </a>
+    <a href="#calendario" class="quick-card">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="1.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      <strong>Calendario</strong>
+      <span>Fechas de evaluaciones por curso</span>
+    </a>
+    <a href="#profesores" class="quick-card">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
+      <strong>Profesores</strong>
+      <span>Equipo docente y departamentos</span>
+    </a>
+    <a href="#documentos" class="quick-card">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg>
+      <strong>Documentos</strong>
+      <span>PEI, reglamentos y protocolos</span>
+    </a>
+    <a href="#contacto" class="quick-card">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <strong>Ubicación</strong>
+      <span>Cómo llegar y postular</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ NOSOTROS ============ -->
+<section class="section" id="nosotros">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="eyebrow">Nuestro proyecto educativo</div>
+        <h2>Un liceo público, laico y con vocación artística</h2>
+        <p>El Liceo Almirante Riveros nace en 2007 de la fusión de la Escuela D-135 y el Liceo Santa María, y hoy entrega educación científico-humanista a la comunidad de Conchalí. Nuestro proyecto integra el desarrollo físico, afectivo, intelectual, cultural y social del estudiantado, junto con habilidades del siglo XXI como el pensamiento crítico y el uso responsable de la información.</p>
+        <p>Contamos con el sello artístico y cultural, que incorpora talleres de canto, danza, actuación y artes visuales, escénicas y musicales a lo largo de toda la trayectoria escolar, además de un fuerte compromiso con la educación ambiental y la cultura democrática.</p>
+        <a href="#documentos" class="btn btn-navy">Descargar Proyecto Educativo Institucional</a>
+      </div>
+      <div class="pillars reveal">
+        <div class="pillar">
+          <div>
+            <h4>Misión</h4>
+            <p>Entregar una formación integral, sólida y de calidad desde el nivel preescolar hasta 4° medio, con foco en el pensamiento crítico y el respeto a los derechos humanos.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div>
+            <h4>Comunidad y participación</h4>
+            <p>Fomentamos acuerdos colectivos entre las y los integrantes de la comunidad escolar, favoreciendo una cultura democrática y de diálogo permanente.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div>
+            <h4>Conciencia medioambiental</h4>
+            <p>Promovemos actitudes de protección ambiental orientadas a comprender y cuidar el entorno, la cultura y el ser humano.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NOTICIAS ============ -->
+<section class="section" id="noticias" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Bitácora institucional</div>
+      <h2>Noticias y avisos</h2>
+      <p>Mantente al tanto de las actividades, logros y comunicados del liceo. Reemplaza estas tarjetas por las noticias reales a medida que se publiquen.</p>
+    </div>
+    <div class="news-grid">
+      <article class="news-card reveal">
+        <div class="news-thumb"><span>Convivencia</span></div>
+        <div class="news-body">
+          <span class="news-date">03 de julio, 2026</span>
+          <h3>Semana de la Educación Artística en el liceo</h3>
+          <p>Estudiantes de todos los niveles presentaron muestras de canto, danza y artes visuales trabajadas durante el primer semestre.</p>
+          <a href="#" class="news-link">Leer noticia completa →</a>
+        </div>
+      </article>
+      <article class="news-card reveal">
+        <div class="news-thumb"><span>Académico</span></div>
+        <div class="news-body">
+          <span class="news-date">26 de junio, 2026</span>
+          <h3>Resultados destacados en la Feria Científica comunal</h3>
+          <p>Equipos de 7° básico a 4° medio representaron al establecimiento con proyectos de sustentabilidad local.</p>
+          <a href="#" class="news-link">Leer noticia completa →</a>
+        </div>
+      </article>
+      <article class="news-card reveal">
+        <div class="news-thumb"><span>Comunidad</span></div>
+        <div class="news-body">
+          <span class="news-date">15 de junio, 2026</span>
+          <h3>Nuevo protocolo de convivencia escolar disponible</h3>
+          <p>Ya puedes revisar y descargar el reglamento actualizado en la sección de documentos institucionales.</p>
+          <a href="#documentos" class="news-link">Ir a documentos →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALERIA ============ -->
+<section class="section" id="galeria">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Vida escolar</div>
+      <h2>Galería institucional</h2>
+      <p>Fotografías de actos, deportes, talleres artísticos y actividades del liceo. Haz clic en cualquier imagen para ampliarla.</p>
+    </div>
+
+    <div class="gallery-controls" role="tablist" aria-label="Filtrar galería">
+      <button class="chip active" data-filter="todas">Todas</button>
+      <button class="chip" data-filter="actos">Actos</button>
+      <button class="chip" data-filter="deportes">Deportes</button>
+      <button class="chip" data-filter="artes">Artes</button>
+      <button class="chip" data-filter="ciencias">Ciencias</button>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- items injected by JS -->
+    </div>
+  </div>
+</section>
+
+<div class="wave" aria-hidden="true" style="transform:rotate(180deg);">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,32 C150,60 350,0 600,28 C850,56 1050,4 1200,30 L1200,60 L0,60 Z" fill="#0B2340"/></svg>
+</div>
+
+<!-- ============ CALENDARIO ============ -->
+<section class="section" id="calendario" style="background:var(--navy-deep); padding-top:0;">
+  <div class="container">
+    <div class="section-head reveal" style="max-width:680px;">
+      <div class="eyebrow" style="color:var(--brass-light);">Bitácora académica</div>
+      <h2 style="color:#fff;">Calendario de evaluaciones</h2>
+      <p style="color:#B9C6D6;">Filtra por curso para revisar las próximas pruebas y trabajos. Actualiza esta tabla cada semestre con las fechas oficiales de UTP.</p>
+    </div>
+
+    <div class="calendar-panel reveal">
+      <div class="calendar-toolbar">
+        <div>
+          <label for="filtroCurso">Curso</label>
+          <select id="filtroCurso">
+            <option value="todos">Todos los cursos</option>
+          </select>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="evals">
+          <thead>
+            <tr><th>Fecha</th><th>Curso</th><th>Asignatura</th><th>Tipo</th></tr>
+          </thead>
+          <tbody id="calendarBody"></tbody>
+        </table>
+      </div>
+      <div class="cal-empty" id="calEmpty" style="display:none;">No hay evaluaciones registradas para este curso.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROFESORES ============ -->
+<section class="section" id="profesores">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Nuestro equipo</div>
+      <h2>Cuerpo docente y profesionales de apoyo</h2>
+      <p>Un equipo comprometido con el aprendizaje y el bienestar de cada estudiante. Reemplaza estas fichas por el listado y fotografías reales del liceo.</p>
+    </div>
+    <div class="staff-grid" id="staffGrid"></div>
+  </div>
+</section>
+
+<!-- ============ SELLO ARTISTICO ============ -->
+<section class="section sello">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" style="color:var(--brass-light);">Sello distintivo</div>
+      <h2>Educación con vocación artística</h2>
+      <p>De 1° básico a 4° medio, nuestros estudiantes participan en talleres intensivos que complementan la formación científico-humanista.</p>
+    </div>
+    <div class="taller-grid">
+      <div class="taller reveal">🎤 Canto — 1° a 6° básico</div>
+      <div class="taller reveal">💃 Danza — 1° a 6° básico</div>
+      <div class="taller reveal">🎭 Actuación — 1° a 6° básico</div>
+      <div class="taller reveal">🎨 Artes Visuales — 7° a 4° medio</div>
+      <div class="taller reveal">🎬 Artes Escénicas — 7° a 4° medio</div>
+      <div class="taller reveal">🎶 Artes Musicales — 7° a 4° medio</div>
+      <div class="taller reveal">🎺 Conchalí Big Band</div>
+      <div class="taller reveal">🌱 Educación medioambiental</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOCUMENTOS ============ -->
+<section class="section" id="documentos" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Transparencia</div>
+      <h2>Documentos institucionales</h2>
+      <p>Descarga los principales documentos normativos del liceo. Sustituye los enlaces de ejemplo por los archivos PDF reales.</p>
+    </div>
+    <div class="docs-list">
+      <div class="doc-row reveal">
+        <div class="doc-ico">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
+        </div>
+        <div class="doc-meta"><strong>Proyecto Educativo Institucional (PEI)</strong><span>Actualizado 2026 · PDF</span></div>
+        <a href="#" class="doc-dl">Descargar</a>
+      </div>
+      <div class="doc-row reveal">
+        <div class="doc-ico">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
+        </div>
+        <div class="doc-meta"><strong>Reglamento Interno y de Convivencia Escolar</strong><span>Actualizado 2026 · PDF</span></div>
+        <a href="#" class="doc-dl">Descargar</a>
+      </div>
+      <div class="doc-row reveal">
+        <div class="doc-ico">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
+        </div>
+        <div class="doc-meta"><strong>Protocolos de actuación (seguridad, maltrato, accidentes)</strong><span>PDF</span></div>
+        <a href="#" class="doc-dl">Descargar</a>
+      </div>
+      <div class="doc-row reveal">
+        <div class="doc-ico">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
+        </div>
+        <div class="doc-meta"><strong>Calendario Escolar Anual</strong><span>Año lectivo 2026 · PDF</span></div>
+        <a href="#" class="doc-dl">Descargar</a>
+      </div>
+      <div class="doc-row reveal">
+        <div class="doc-ico">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
+        </div>
+        <div class="doc-meta"><strong>Lista de útiles escolares</strong><span>Por nivel · PDF</span></div>
+        <a href="#" class="doc-dl">Descargar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section" id="faq">
+  <div class="container" style="max-width:820px;">
+    <div class="section-head reveal">
+      <div class="eyebrow">Admisión</div>
+      <h2>Preguntas frecuentes</h2>
+    </div>
+    <div id="faqList">
+      <div class="faq-item">
+        <button class="faq-q">¿Cómo postulo a una vacante? <span class="plus">+</span></button>
+        <div class="faq-a"><p>La postulación se realiza de forma presencial en el liceo, completando la ficha de matrícula junto con la documentación del estudiante. No se reciben postulaciones en línea.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿En qué periodo se reciben postulaciones? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Las postulaciones se realizan entre agosto y diciembre de cada año, y la matrícula de estudiantes nuevos se formaliza entre octubre y diciembre.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿Qué niveles imparte el liceo? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Educación parvularia (Prekínder y Kínder), enseñanza básica y enseñanza media, bajo la modalidad científico-humanista.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">¿El liceo cuenta con apoyo a la inclusión? <span class="plus">+</span></button>
+        <div class="faq-a"><p>Sí, contamos con Programa de Integración Escolar y equipo multidisciplinario de apoyo psicosocial.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REDES ============ -->
+<section class="section social-band" id="redes">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow" style="color:var(--brass-light);">Mantente conectado</div>
+      <h2>Síguenos en redes sociales</h2>
+      <p style="color:#B9C6D6;">Actualiza estos enlaces con las cuentas oficiales del liceo.</p>
+    </div>
+    <div class="social-row">
+      <a href="#" class="social-tile">
+        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6v1.9H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg>
+        <div><strong>Facebook</strong><span>@liceoalmiranteriveros</span></div>
+      </a>
+      <a href="#" class="social-tile">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+        <div><strong>Instagram</strong><span>@liceoalmiranteriveros</span></div>
+      </a>
+      <a href="#" class="social-tile">
+        <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.6-.5-5.2c-.3-1-1.1-1.8-2.1-2C18.6 4.3 12 4.3 12 4.3s-6.6 0-8.4.5c-1 .2-1.8 1-2.1 2C1 8.4 1 12 1 12s0 3.6.5 5.2c.3 1 1.1 1.8 2.1 2 1.8.5 8.4.5 8.4.5s6.6 0 8.4-.5c1-.2 1.8-1 2.1-2 .5-1.6.5-5.2.5-5.2zM9.8 15.5V8.5l6.4 3.5-6.4 3.5z"/></svg>
+        <div><strong>YouTube</strong><span>Liceo Almirante Riveros</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACTO ============ -->
+<section class="section" id="contacto" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Hablemos</div>
+      <h2>Contacto y ubicación</h2>
+      <p>¿Tienes dudas sobre matrícula o quieres contactar a un departamento? Escríbenos.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><strong>Dirección</strong><span>Ernesto Ried 5730, Conchalí, Región Metropolitana</span></div>
+        </div>
+        <div class="item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.5 2.1L8 9.7a16 16 0 006 6l1.2-1.2a2 2 0 012.1-.5c.9.3 1.8.5 2.7.6a2 2 0 011.9 2.3z"/></svg>
+          <div><strong>Teléfono</strong><span>+56 2 2623 2223</span></div>
+        </div>
+        <div class="item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
+          <div><strong>Correo</strong><span>liceo.almiranteriveros@coresam.cl</span></div>
+        </div>
+        <div class="item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div><strong>Horario de atención</strong><span>Lunes a viernes, 8:00–13:30 y 15:00–17:00 hrs</span></div>
+        </div>
+        <div class="map-wrap">
+          <iframe title="Mapa del liceo" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Ernesto+Ried+5730,+Conchal%C3%AD,+Chile&output=embed"></iframe>
+        </div>
+      </div>
+
+      <form class="contact-form reveal" id="contactForm" action="mailto:liceo.almiranteriveros@coresam.cl" method="post" enctype="text/plain">
+        <div class="form-row">
+          <div>
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" name="nombre" required>
+          </div>
+          <div>
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="motivo">Motivo</label>
+            <select id="motivo" name="motivo">
+              <option>Postulación / matrícula</option>
+              <option>Consulta académica</option>
+              <option>Convivencia escolar</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div>
+            <label for="curso">Curso (si corresponde)</label>
+            <input type="text" id="curso" name="curso" placeholder="Ej: 3° Medio A">
+          </div>
+        </div>
+        <div>
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" name="mensaje" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-navy" style="justify-self:start;">Enviar mensaje</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand" style="margin-bottom:14px;">
+          <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="22" stroke="#E6C878" stroke-width="2"/>
+            <path d="M24 6 L27 22 L24 24 L21 22 Z" fill="#E6C878"/>
+            <path d="M24 42 L21 26 L24 24 L27 26 Z" fill="#5C7A96"/>
+            <path d="M6 24 L22 21 L24 24 L22 27 Z" fill="#5C7A96"/>
+            <path d="M42 24 L26 27 L24 24 L26 21 Z" fill="#5C7A96"/>
+            <circle cx="24" cy="24" r="3" fill="#fff"/>
+          </svg>
+          <strong style="font-family:'Fraunces',serif; color:#fff;">Liceo Almirante Riveros</strong>
+        </div>
+        <p>Establecimiento municipal científico-humanista, dependiente de la Corporación de Educación, Salud y Atención de Menores de Conchalí (CORESAM).</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#noticias">Noticias</a></li>
+          <li><a href="#galeria">Galería</a></li>
+          <li><a href="#calendario">Calendario</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Comunidad</h4>
+        <ul>
+          <li><a href="#profesores">Profesores</a></li>
+          <li><a href="#documentos">Documentos</a></li>
+          <li><a href="#faq">Preguntas frecuentes</a></li>
+          <li><a href="#redes">Redes sociales</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li>Ernesto Ried 5730, Conchalí</li>
+          <li>+56 2 2623 2223</li>
+          <li>liceo.almiranteriveros@coresam.cl</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Liceo Almirante Riveros. Todos los derechos reservados.</span>
+      <span>Sitio institucional no oficial — reemplaza el contenido de ejemplo por información verificada del establecimiento.</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Volver arriba">↑</button>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">×</button>
+  <div class="lightbox-box">
+    <div class="lightbox-media">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
+    </div>
+    <div class="lightbox-info">
+      <h3 id="lightboxTitle" style="color:#fff; margin-bottom:4px;"></h3>
+      <p id="lightboxCat" style="color:#B9C6D6; margin:0; font-size:.85rem;"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== NAV ===================== */
+const menuToggle = document.getElementById('menuToggle');
+const primaryNav = document.getElementById('primaryNav');
+menuToggle.addEventListener('click', () => {
+  const open = primaryNav.classList.toggle('open');
+  menuToggle.setAttribute('aria-expanded', open);
+  menuToggle.textContent = open ? '✕' : '☰';
+});
+primaryNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  primaryNav.classList.remove('open');
+  menuToggle.setAttribute('aria-expanded', 'false');
+  menuToggle.textContent = '☰';
+}));
+
+/* active link on scroll */
+const navLinks = [...primaryNav.querySelectorAll('a')];
+const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      const id = '#' + entry.target.id;
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+    }
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+sections.forEach(s => spy.observe(s));
+
+/* ===================== REVEAL ON SCROLL ===================== */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+}, { threshold: .12 });
+revealEls.forEach(el => revealObs.observe(el));
+
+/* ===================== BACK TO TOP ===================== */
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  toTop.classList.toggle('show', window.scrollY > 600);
+});
+toTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+/* ===================== GALERIA ===================== */
+const galleryData = [
+  { titulo:'Ceremonia de licenciatura 4° medio', cat:'actos' },
+  { titulo:'Acto inicio año escolar', cat:'actos' },
+  { titulo:'Campeonato interescolar de fútbol', cat:'deportes' },
+  { titulo:'Jornada de vóleibol femenino', cat:'deportes' },
+  { titulo:'Muestra de artes visuales', cat:'artes' },
+  { titulo:'Taller de danza — enseñanza básica', cat:'artes' },
+  { titulo:'Presentación Conchalí Big Band', cat:'artes' },
+  { titulo:'Feria científica comunal', cat:'ciencias' },
+  { titulo:'Laboratorio de ciencias en terreno', cat:'ciencias' },
+  { titulo:'Desfile aniversario del liceo', cat:'actos' },
+  { titulo:'Torneo de básquetbol', cat:'deportes' },
+  { titulo:'Taller de actuación', cat:'artes' },
+];
+const galleryGrid = document.getElementById('galleryGrid');
+function renderGallery(filter){
+  galleryGrid.innerHTML = '';
+  galleryData
+    .filter(g => filter === 'todas' || g.cat === filter)
+    .forEach(g => {
+      const fig = document.createElement('figure');
+      fig.className = 'gallery-item';
+      fig.dataset.titulo = g.titulo;
+      fig.dataset.cat = g.cat;
+      fig.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
+        <figcaption>${g.titulo}</figcaption>`;
+      fig.addEventListener('click', () => openLightbox(g));
+      galleryGrid.appendChild(fig);
+    });
+}
+renderGallery('todas');
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    renderGallery(chip.dataset.filter);
+  });
+});
+
+const lightbox = document.getElementById('lightbox');
+const lightboxTitle = document.getElementById('lightboxTitle');
+const lightboxCat = document.getElementById('lightboxCat');
+function openLightbox(item){
+  lightboxTitle.textContent = item.titulo;
+  lightboxCat.textContent = 'Categoría: ' + item.cat.charAt(0).toUpperCase() + item.cat.slice(1);
+  lightbox.classList.add('open');
+}
+document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('open'); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') lightbox.classList.remove('open'); });
+
+/* ===================== CALENDARIO DE EVALUACIONES ===================== */
+const evalData = [
+  { fecha:'14 jul 2026', curso:'1° Medio A', asig:'Matemática', tipo:'Prueba coeficiente 2' },
+  { fecha:'16 jul 2026', curso:'2° Medio B', asig:'Lenguaje y Comunicación', tipo:'Ensayo PAES' },
+  { fecha:'18 jul 2026', curso:'8° Básico A', asig:'Ciencias Naturales', tipo:'Trabajo de laboratorio' },
+  { fecha:'21 jul 2026', curso:'3° Medio A', asig:'Historia y Geografía', tipo:'Prueba coeficiente 1' },
+  { fecha:'23 jul 2026', curso:'4° Medio A', asig:'Educación Ciudadana', tipo:'Disertación grupal' },
+  { fecha:'25 jul 2026', curso:'1° Medio A', asig:'Inglés', tipo:'Prueba oral' },
+  { fecha:'28 jul 2026', curso:'6° Básico B', asig:'Artes Visuales', tipo:'Entrega de proyecto' },
+  { fecha:'30 jul 2026', curso:'2° Medio B', asig:'Biología', tipo:'Prueba coeficiente 1' },
+];
+const filtroCurso = document.getElementById('filtroCurso');
+const calendarBody = document.getElementById('calendarBody');
+const calEmpty = document.getElementById('calEmpty');
+
+[...new Set(evalData.map(e => e.curso))].sort().forEach(curso => {
+  const opt = document.createElement('option');
+  opt.value = curso; opt.textContent = curso;
+  filtroCurso.appendChild(opt);
+});
+
+function renderCalendar(curso){
+  const rows = evalData.filter(e => curso === 'todos' || e.curso === curso);
+  calendarBody.innerHTML = rows.map(e => `
+    <tr>
+      <td>${e.fecha}</td>
+      <td><span class="badge-curso">${e.curso}</span></td>
+      <td>${e.asig}</td>
+      <td>${e.tipo}</td>
+    </tr>`).join('');
+  calEmpty.style.display = rows.length ? 'none' : 'block';
+}
+filtroCurso.addEventListener('change', () => renderCalendar(filtroCurso.value));
+renderCalendar('todos');
+
+/* ===================== PROFESORES ===================== */
+const staffData = [
+  { nombre:'Equipo Directivo', rol:'Dirección', depto:'Reemplazar por nombre real' },
+  { nombre:'Jefatura de UTP', rol:'Unidad Técnico-Pedagógica', depto:'Reemplazar por nombre real' },
+  { nombre:'Depto. de Lenguaje', rol:'Docente', depto:'Lenguaje y Comunicación' },
+  { nombre:'Depto. de Matemática', rol:'Docente', depto:'Matemática' },
+  { nombre:'Depto. de Ciencias', rol:'Docente', depto:'Ciencias Naturales' },
+  { nombre:'Depto. de Historia', rol:'Docente', depto:'Historia y Geografía' },
+  { nombre:'Depto. de Artes', rol:'Docente', depto:'Sello Artístico' },
+  { nombre:'Equipo PIE', rol:'Educadora Diferencial', depto:'Programa de Integración Escolar' },
+];
+const staffGrid = document.getElementById('staffGrid');
+staffGrid.innerHTML = staffData.map(s => {
+  const initials = s.nombre.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  return `<div class="staff-card">
+    <div class="staff-avatar">${initials}</div>
+    <h4>${s.nombre}</h4>
+    <div class="staff-role">${s.rol}</div>
+    <div class="staff-dept">${s.depto}</div>
+  </div>`;
+}).join('');
+
+/* ===================== FAQ ===================== */
+document.querySelectorAll('.faq-item').forEach(item => {
+  const btn = item.querySelector('.faq-q');
+  const ans = item.querySelector('.faq-a');
+  btn.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(o => {
+      o.classList.remove('open');
+      o.querySelector('.faq-a').style.maxHeight = null;
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      ans.style.maxHeight = ans.scrollHeight + 'px';
+    }
+  });
+});
+
+/* ===================== CONTACT FORM ===================== */
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  // mailto: forms don't submit reliably from JS-driven flows in all browsers;
+  // this just confirms to the user their client should open.
+});
+
+/* footer year */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
