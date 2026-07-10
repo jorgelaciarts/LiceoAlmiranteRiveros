@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de administración | Liceo Almirante Riveros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<style>
+  :root{
+    --navy-deep:#0B2340; --navy-mid:#123A5C; --brass:#C9A24B; --brass-light:#E6C878;
+    --teal:#2F6B5E; --paper:#F4F1E8; --paper-white:#FBF9F4; --ink:#1B2430; --ink-soft:#525B68; --line:#D9D2BE;
+    --danger:#B3452C; --ok:#2F6B5E;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  body{ margin:0; font-family:'Public Sans',system-ui,sans-serif; background:var(--paper); color:var(--ink); }
+  h1,h2,h3{ font-family:'Fraunces',serif; color:var(--navy-deep); margin:0 0 6px; }
+  button, .file-btn{
+    font-family:inherit; font-weight:700; font-size:.85rem; border-radius:5px; border:1.5px solid transparent;
+    padding:10px 16px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-brass{ background:var(--brass); color:var(--navy-deep); }
+  .btn-brass:hover{ background:var(--brass-light); }
+  .btn-outline{ background:transparent; color:#fff; border-color:rgba(255,255,255,.5); }
+  .btn-outline:hover{ background:rgba(255,255,255,.12); }
+  .btn-ghost{ background:var(--paper-white); color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ background:#fff; }
+  .btn-danger{ background:transparent; color:var(--danger); border-color:var(--danger); padding:7px 12px; font-size:.78rem; }
+  .btn-danger:hover{ background:var(--danger); color:#fff; }
+  input,select,textarea{ font-family:inherit; }
+
+  /* ---------- LOGIN ---------- */
+  #loginScreen{
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(1100px 600px at 82% -10%, #1D4A73, var(--navy-deep) 60%);
+    padding:20px;
+  }
+  .login-card{
+    background:#fff; border-radius:10px; padding:40px 36px; width:100%; max-width:380px;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+  .login-card .brand{ display:flex; align-items:center; gap:10px; margin-bottom:26px; }
+  .login-card h2{ font-size:1.1rem; margin:0; }
+  .login-card p.sub{ color:var(--ink-soft); font-size:.85rem; margin:0 0 22px; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:.8rem; font-weight:700; color:var(--navy-deep); margin-bottom:6px; }
+  .field input, .field select, .field textarea{
+    width:100%; border:1.5px solid var(--line); border-radius:5px; padding:10px 12px;
+    font-size:.92rem; background:var(--paper-white); color:var(--ink);
+  }
+  .field textarea{ min-height:80px; resize:vertical; }
+  #loginError{ color:var(--danger); font-size:.82rem; margin:-6px 0 14px; display:none; }
+  #loginBtn{ width:100%; justify-content:center; padding:12px; }
+  .login-hint{ margin-top:20px; font-size:.76rem; color:var(--ink-soft); line-height:1.5; }
+
+  /* ---------- PANEL PRINCIPAL ---------- */
+  #adminScreen{ display:none; }
+  .topbar{ background:var(--navy-deep); color:#fff; padding:18px 28px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; position:sticky; top:0; z-index:20; }
+  .topbar h1{ color:#fff; font-size:1.15rem; margin:0; }
+  .topbar p{ margin:2px 0 0; color:#B9C6D6; font-size:.8rem; }
+  .topbar-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .status{ font-size:.78rem; padding:5px 12px; border-radius:20px; font-weight:700; }
+  .status.saved{ background:rgba(47,107,94,.2); color:#c9f0e6; }
+  .status.pending{ background:rgba(201,162,75,.25); color:#ffe9b3; }
+  .status.error{ background:rgba(179,69,44,.25); color:#ffd0c2; }
+
+  .layout{ display:grid; grid-template-columns:220px 1fr; min-height:calc(100vh - 76px); }
+  .sidebar{ background:#fff; border-right:1px solid var(--line); padding:22px 14px; }
+  .sidebar button{
+    display:block; width:100%; text-align:left; background:none; border:none; padding:12px 14px;
+    font-weight:600; font-size:.88rem; color:var(--ink-soft); border-radius:6px; margin-bottom:4px;
+  }
+  .sidebar button.active{ background:var(--navy-deep); color:#fff; }
+  .sidebar button:hover:not(.active){ background:var(--paper); }
+
+  .content{ padding:34px 40px; max-width:900px; }
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+  .panel > p.hint{ color:var(--ink-soft); font-size:.9rem; margin-top:0; margin-bottom:26px; max-width:60ch; }
+
+  .card{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:22px 24px; margin-bottom:18px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+  .item-card{ position:relative; }
+  .item-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:10px; }
+  .item-head span.tag{ font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--brass); }
+  .item-head .save-state{ font-size:.72rem; color:var(--ink-soft); }
+
+  .add-btn{
+    width:100%; border:1.5px dashed var(--line); background:none; color:var(--teal); font-weight:700;
+    padding:16px; border-radius:8px; margin-top:6px;
+  }
+  .add-btn:hover{ background:#fff; border-color:var(--teal); }
+
+  .empty-state{ text-align:center; padding:40px 20px; color:var(--ink-soft); font-size:.9rem; }
+  .seed-box{
+    border:1.5px dashed var(--brass); background:#fdf8ec; border-radius:8px; padding:18px 20px;
+    margin-bottom:22px; font-size:.86rem; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+
+  @media (max-width: 820px){
+    .layout{ grid-template-columns:1fr; }
+    .sidebar{ display:flex; overflow-x:auto; border-right:none; border-bottom:1px solid var(--line); gap:4px; }
+    .sidebar button{ white-space:nowrap; }
+    .content{ padding:24px 18px; }
+    .grid2{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="22" stroke="#C9A24B" stroke-width="2"/>
+        <path d="M24 6 L27 22 L24 24 L21 22 Z" fill="#C9A24B"/>
+        <path d="M24 42 L21 26 L24 24 L27 26 Z" fill="#0B2340"/>
+        <path d="M6 24 L22 21 L24 24 L22 27 Z" fill="#0B2340"/>
+        <path d="M42 24 L26 27 L24 24 L26 21 Z" fill="#0B2340"/>
+        <circle cx="24" cy="24" r="3" fill="#0B2340"/>
+      </svg>
+      <div>
+        <h2>Liceo Almirante Riveros</h2>
+        <p class="sub" style="margin:2px 0 0;">Panel de administración</p>
+      </div>
+    </div>
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginEmail">Correo</label>
+        <input type="email" id="loginEmail" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="loginPassword">Contraseña</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <div id="loginError"></div>
+      <button type="submit" class="btn-brass" id="loginBtn">Iniciar sesión</button>
+    </form>
+    <p class="login-hint">Los usuarios administradores se crean desde Firebase Console → Authentication → Users. No hay registro público.</p>
+  </div>
+</div>
+
+<!-- ============ PANEL ============ -->
+<div id="adminScreen">
+  <div class="topbar">
+    <div>
+      <h1>Panel de administración — Liceo Almirante Riveros</h1>
+      <p id="sessionInfo">Conectando…</p>
+    </div>
+    <div class="topbar-actions">
+      <span class="status saved" id="statusPill">Conectado</span>
+      <button class="btn-outline" id="logoutBtn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <nav class="sidebar" id="sidebar">
+      <button data-panel="aviso" class="active">📣 Aviso</button>
+      <button data-panel="contacto">📍 Contacto</button>
+      <button data-panel="redes">🔗 Redes sociales</button>
+      <button data-panel="noticias">📰 Noticias</button>
+      <button data-panel="galeria">🖼 Galería</button>
+      <button data-panel="calendario">🗓 Calendario</button>
+      <button data-panel="profesores">🎓 Profesores</button>
+      <button data-panel="documentos">📄 Documentos</button>
+    </nav>
+
+    <div class="content">
+
+      <div class="seed-box" id="seedBox" style="display:none;">
+        <span>Tu base de datos está vacía. Puedes cargar contenido de ejemplo para partir con algo editable.</span>
+        <button class="btn-brass" id="seedBtn">📥 Cargar datos de ejemplo</button>
+      </div>
+
+      <!-- AVISO -->
+      <section class="panel active" id="panel-aviso">
+        <h2>Aviso destacado</h2>
+        <p class="hint">Es el mensaje que aparece en la franja bajo el menú. Se guarda automáticamente al salir del campo.</p>
+        <div class="card">
+          <div class="field">
+            <label for="aviso">Texto del aviso</label>
+            <textarea id="aviso" placeholder="Ej: Reunión de apoderados: martes 15 de julio, 18:30 hrs."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACTO -->
+      <section class="panel" id="panel-contacto">
+        <h2>Información de contacto</h2>
+        <p class="hint">Se muestra en la barra superior, la sección de contacto, el mapa y el pie de página.</p>
+        <div class="card">
+          <div class="field"><label for="c-direccion">Dirección</label><input id="c-direccion" placeholder="Calle, número, comuna, región"></div>
+          <div class="grid2">
+            <div class="field"><label for="c-telefono">Teléfono</label><input id="c-telefono" placeholder="+56 2 2623 2223"></div>
+            <div class="field"><label for="c-correo">Correo electrónico</label><input id="c-correo" type="email" placeholder="contacto@liceo.cl"></div>
+          </div>
+          <div class="field"><label for="c-horario">Horario de atención</label><input id="c-horario" placeholder="Lunes a viernes, 8:00–17:00 hrs"></div>
+        </div>
+      </section>
+
+      <!-- REDES -->
+      <section class="panel" id="panel-redes">
+        <h2>Redes sociales</h2>
+        <p class="hint">Pega el enlace completo de cada cuenta oficial.</p>
+        <div class="card">
+          <div class="field"><label for="r-facebook">Facebook</label><input id="r-facebook" placeholder="https://facebook.com/..."></div>
+          <div class="field"><label for="r-instagram">Instagram</label><input id="r-instagram" placeholder="https://instagram.com/..."></div>
+          <div class="field"><label for="r-youtube">YouTube</label><input id="r-youtube" placeholder="https://youtube.com/..."></div>
+        </div>
+      </section>
+
+      <!-- NOTICIAS -->
+      <section class="panel" id="panel-noticias">
+        <h2>Noticias</h2>
+        <p class="hint">Cada cambio se guarda solo en la base de datos, sin botones adicionales.</p>
+        <div id="noticiasList"></div>
+        <button class="add-btn" data-add="noticias">+ Agregar noticia</button>
+      </section>
+
+      <!-- GALERIA -->
+      <section class="panel" id="panel-galeria">
+        <h2>Galería institucional</h2>
+        <p class="hint">Cada foto se muestra como tarjeta con título y categoría. Para fotos reales, pídeme que conecte imágenes subidas al repositorio.</p>
+        <div id="galeriaList"></div>
+        <button class="add-btn" data-add="galeria">+ Agregar foto</button>
+      </section>
+
+      <!-- CALENDARIO -->
+      <section class="panel" id="panel-calendario">
+        <h2>Calendario de evaluaciones</h2>
+        <p class="hint">El filtro por curso del sitio se arma automáticamente con lo que escribas aquí.</p>
+        <div id="calendarioList"></div>
+        <button class="add-btn" data-add="calendario">+ Agregar evaluación</button>
+      </section>
+
+      <!-- PROFESORES -->
+      <section class="panel" id="panel-profesores">
+        <h2>Profesores y equipo</h2>
+        <p class="hint">Nombre, rol y departamento de cada docente o profesional de apoyo.</p>
+        <div id="profesoresList"></div>
+        <button class="add-btn" data-add="profesores">+ Agregar persona</button>
+      </section>
+
+      <!-- DOCUMENTOS -->
+      <section class="panel" id="panel-documentos">
+        <h2>Documentos institucionales</h2>
+        <p class="hint">Sube el PDF a tu repositorio (por ejemplo en <code>/documentos</code>) y pega aquí la ruta o enlace.</p>
+        <div id="documentosList"></div>
+        <button class="add-btn" data-add="documentos">+ Agregar documento</button>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc,
+  query, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* ---------- LOGIN ---------- */
+const loginScreen = document.getElementById('loginScreen');
+const adminScreen = document.getElementById('adminScreen');
+const loginForm = document.getElementById('loginForm');
+const loginError = document.getElementById('loginError');
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginError.style.display = 'none';
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Ingresando…';
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+  }catch(err){
+    loginError.textContent = 'Correo o contraseña incorrectos.';
+    loginError.style.display = 'block';
+  }
+  btn.disabled = false; btn.textContent = 'Iniciar sesión';
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
+
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    loginScreen.style.display = 'none';
+    adminScreen.style.display = 'block';
+    document.getElementById('sessionInfo').textContent = 'Sesión: ' + user.email;
+    initPanel();
+  }else{
+    loginScreen.style.display = 'flex';
+    adminScreen.style.display = 'none';
+  }
+});
+
+/* ---------- navegación entre secciones ---------- */
+document.getElementById('sidebar').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-panel]');
+  if(!btn) return;
+  document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+});
+
+/* ---------- estado de guardado ---------- */
+const statusPill = document.getElementById('statusPill');
+function setStatus(kind, text){
+  statusPill.className = 'status ' + kind;
+  statusPill.textContent = text;
+}
+function debounce(fn, ms){
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+/* ---------- CAMPOS SIMPLES (settings/site) ---------- */
+const settingsRef = doc(db, 'settings', 'site');
+const simpleFieldMap = {
+  'aviso': ['aviso'],
+  'c-direccion': ['contacto','direccion'],
+  'c-telefono': ['contacto','telefono'],
+  'c-correo': ['contacto','correo'],
+  'c-horario': ['contacto','horario'],
+  'r-facebook': ['redes','facebook'],
+  'r-instagram': ['redes','instagram'],
+  'r-youtube': ['redes','youtube'],
+};
+
+const saveSettingsField = debounce(async (path, value) => {
+  setStatus('pending', 'Guardando…');
+  try{
+    const patch = path.length === 1 ? { [path[0]]: value } : { [path[0]]: { [path[1]]: value } };
+    await setDoc(settingsRef, patch, { merge: true });
+    setStatus('saved', 'Guardado ✓');
+  }catch(err){
+    console.error(err);
+    setStatus('error', 'Error al guardar');
+  }
+}, 600);
+
+Object.entries(simpleFieldMap).forEach(([id, path]) => {
+  document.getElementById(id).addEventListener('input', (e) => {
+    setStatus('pending', 'Editando…');
+    saveSettingsField(path, e.target.value);
+  });
+});
+
+async function loadSettings(){
+  const snap = await getDoc(settingsRef);
+  const data = snap.exists() ? snap.data() : {};
+  document.getElementById('aviso').value = data.aviso || '';
+  const c = data.contacto || {};
+  document.getElementById('c-direccion').value = c.direccion || '';
+  document.getElementById('c-telefono').value = c.telefono || '';
+  document.getElementById('c-correo').value = c.correo || '';
+  document.getElementById('c-horario').value = c.horario || '';
+  const r = data.redes || {};
+  document.getElementById('r-facebook').value = r.facebook || '';
+  document.getElementById('r-instagram').value = r.instagram || '';
+  document.getElementById('r-youtube').value = r.youtube || '';
+}
+
+/* ---------- LISTAS (colecciones) ---------- */
+const listConfigs = {
+  noticias: {
+    container: 'noticiasList', empty: 'Aún no hay noticias. Agrega la primera.',
+    fields: [
+      { key:'fecha', label:'Fecha', placeholder:'03 de julio, 2026' },
+      { key:'categoria', label:'Categoría', placeholder:'Académico, Deportes, Convivencia…' },
+      { key:'titulo', label:'Título', placeholder:'Título de la noticia', full:true },
+      { key:'resumen', label:'Resumen', placeholder:'Breve descripción', textarea:true, full:true },
+      { key:'enlace', label:'Enlace (opcional)', placeholder:'#' },
+    ],
+    blank: () => ({ fecha:'', categoria:'', titulo:'', resumen:'', enlace:'#' }),
+    title: (item, i) => item.titulo || `Noticia ${i+1}`
+  },
+  galeria: {
+    container: 'galeriaList', empty: 'Aún no hay fotos registradas.',
+    fields: [
+      { key:'titulo', label:'Título de la foto', placeholder:'Acto de aniversario', full:true },
+      { key:'categoria', label:'Categoría', select:['actos','deportes','artes','ciencias'] },
+    ],
+    blank: () => ({ titulo:'', categoria:'actos' }),
+    title: (item, i) => item.titulo || `Foto ${i+1}`
+  },
+  calendario: {
+    container: 'calendarioList', empty: 'Aún no hay evaluaciones registradas.',
+    fields: [
+      { key:'fecha', label:'Fecha', placeholder:'14 jul 2026' },
+      { key:'curso', label:'Curso', placeholder:'1° Medio A' },
+      { key:'asignatura', label:'Asignatura', placeholder:'Matemática' },
+      { key:'tipo', label:'Tipo de evaluación', placeholder:'Prueba coeficiente 2' },
+    ],
+    blank: () => ({ fecha:'', curso:'', asignatura:'', tipo:'' }),
+    title: (item, i) => [item.curso, item.asignatura].filter(Boolean).join(' — ') || `Evaluación ${i+1}`
+  },
+  profesores: {
+    container: 'profesoresList', empty: 'Aún no hay personas registradas.',
+    fields: [
+      { key:'nombre', label:'Nombre', placeholder:'Nombre completo' },
+      { key:'rol', label:'Rol', placeholder:'Docente, Directivo, UTP…' },
+      { key:'departamento', label:'Departamento / asignatura', placeholder:'Lenguaje y Comunicación', full:true },
+    ],
+    blank: () => ({ nombre:'', rol:'', departamento:'' }),
+    title: (item, i) => item.nombre || `Persona ${i+1}`
+  },
+  documentos: {
+    container: 'documentosList', empty: 'Aún no hay documentos registrados.',
+    fields: [
+      { key:'nombre', label:'Nombre del documento', placeholder:'Reglamento Interno', full:true },
+      { key:'detalle', label:'Detalle', placeholder:'Actualizado 2026 · PDF' },
+      { key:'enlace', label:'Enlace o ruta del archivo', placeholder:'documentos/reglamento.pdf' },
+    ],
+    blank: () => ({ nombre:'', detalle:'', enlace:'#' }),
+    title: (item, i) => item.nombre || `Documento ${i+1}`
+  },
+};
+
+const state = { noticias:[], galeria:[], calendario:[], profesores:[], documentos:[] };
+const debouncedUpdates = {};
+
+function getDebouncedUpdate(key, id){
+  const cacheKey = key + ':' + id;
+  if(!debouncedUpdates[cacheKey]){
+    debouncedUpdates[cacheKey] = debounce(async (patch) => {
+      setStatus('pending', 'Guardando…');
+      try{
+        await updateDoc(doc(db, key, id), patch);
+        setStatus('saved', 'Guardado ✓');
+      }catch(err){
+        console.error(err);
+        setStatus('error', 'Error al guardar');
+      }
+    }, 600);
+  }
+  return debouncedUpdates[cacheKey];
+}
+
+function renderList(key){
+  const cfg = listConfigs[key];
+  const container = document.getElementById(cfg.container);
+  const items = state[key];
+  if(!items.length){
+    container.innerHTML = `<div class="empty-state">${cfg.empty}</div>`;
+    return;
+  }
+  container.innerHTML = '';
+  items.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card item-card';
+    const fieldsHtml = cfg.fields.map(f => {
+      const val = (item[f.key] ?? '').toString().replace(/"/g,'&quot;');
+      const widthStyle = f.full ? 'style="grid-column:1/-1"' : '';
+      if(f.select){
+        return `<div class="field" ${widthStyle}><label>${f.label}</label>
+          <select data-key="${f.key}">
+            ${f.select.map(opt => `<option value="${opt}" ${item[f.key]===opt?'selected':''}>${opt}</option>`).join('')}
+          </select></div>`;
+      }
+      if(f.textarea){
+        return `<div class="field" ${widthStyle}><label>${f.label}</label><textarea data-key="${f.key}" placeholder="${f.placeholder||''}">${val}</textarea></div>`;
+      }
+      return `<div class="field" ${widthStyle}><label>${f.label}</label><input data-key="${f.key}" value="${val}" placeholder="${f.placeholder||''}"></div>`;
+    }).join('');
+    card.innerHTML = `
+      <div class="item-head">
+        <span class="tag">${cfg.title(item, i)}</span>
+        <button class="btn-danger" data-remove="${item.id}">Eliminar</button>
+      </div>
+      <div class="grid2">${fieldsHtml}</div>
+    `;
+    card.querySelectorAll('[data-key]').forEach(inputEl => {
+      inputEl.addEventListener('input', () => {
+        item[inputEl.dataset.key] = inputEl.value;
+        card.querySelector('.item-head .tag').textContent = cfg.title(item, i);
+        setStatus('pending', 'Editando…');
+        getDebouncedUpdate(key, item.id)({ [inputEl.dataset.key]: inputEl.value });
+      });
+    });
+    card.querySelector('[data-remove]').addEventListener('click', async () => {
+      if(!confirm('¿Eliminar este elemento? No se puede deshacer.')) return;
+      try{
+        await deleteDoc(doc(db, key, item.id));
+        state[key] = state[key].filter(x => x.id !== item.id);
+        renderList(key);
+        setStatus('saved', 'Guardado ✓');
+      }catch(err){
+        console.error(err);
+        setStatus('error', 'Error al eliminar');
+      }
+    });
+    container.appendChild(card);
+  });
+}
+
+document.querySelectorAll('[data-add]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const key = btn.dataset.add;
+    setStatus('pending', 'Creando…');
+    try{
+      const blank = listConfigs[key].blank();
+      const ref = await addDoc(collection(db, key), { ...blank, createdAt: serverTimestamp() });
+      state[key].push({ id: ref.id, ...blank });
+      renderList(key);
+      setStatus('saved', 'Guardado ✓');
+    }catch(err){
+      console.error(err);
+      setStatus('error', 'Error al crear');
+    }
+  });
+});
+
+async function loadLists(){
+  for(const key of Object.keys(listConfigs)){
+    const snap = await getDocs(query(collection(db, key), orderBy('createdAt')));
+    state[key] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderList(key);
+  }
+  const allEmpty = Object.values(state).every(arr => arr.length === 0);
+  document.getElementById('seedBox').style.display = allEmpty ? 'flex' : 'none';
+}
+
+/* ---------- Datos de ejemplo (primer uso) ---------- */
+const seedContent = {
+  aviso: "Reunión de apoderados: martes 15 de julio, 18:30 hrs, Salón Multiuso.",
+  contacto: {
+    direccion: "Ernesto Ried 5730, Conchalí, Región Metropolitana",
+    telefono: "+56 2 2623 2223",
+    correo: "liceo.almiranteriveros@coresam.cl",
+    horario: "Lunes a viernes, 8:00–13:30 y 15:00–17:00 hrs"
+  },
+  redes: { facebook:"#", instagram:"#", youtube:"#" },
+  noticias: [
+    { fecha:"03 de julio, 2026", categoria:"Convivencia", titulo:"Semana de la Educación Artística en el liceo", resumen:"Estudiantes de todos los niveles presentaron muestras de canto, danza y artes visuales trabajadas durante el primer semestre.", enlace:"#" },
+    { fecha:"26 de junio, 2026", categoria:"Académico", titulo:"Resultados destacados en la Feria Científica comunal", resumen:"Equipos de 7° básico a 4° medio representaron al establecimiento con proyectos de sustentabilidad local.", enlace:"#" },
+  ],
+  galeria: [
+    { titulo:"Ceremonia de licenciatura 4° medio", categoria:"actos" },
+    { titulo:"Campeonato interescolar de fútbol", categoria:"deportes" },
+    { titulo:"Muestra de artes visuales", categoria:"artes" },
+    { titulo:"Feria científica comunal", categoria:"ciencias" },
+  ],
+  calendario: [
+    { fecha:"14 jul 2026", curso:"1° Medio A", asignatura:"Matemática", tipo:"Prueba coeficiente 2" },
+    { fecha:"16 jul 2026", curso:"2° Medio B", asignatura:"Lenguaje y Comunicación", tipo:"Ensayo PAES" },
+  ],
+  profesores: [
+    { nombre:"Equipo Directivo", rol:"Dirección", departamento:"Reemplazar por nombre real" },
+    { nombre:"Jefatura de UTP", rol:"Unidad Técnico-Pedagógica", departamento:"Reemplazar por nombre real" },
+  ],
+  documentos: [
+    { nombre:"Proyecto Educativo Institucional (PEI)", detalle:"Actualizado 2026 · PDF", enlace:"#" },
+    { nombre:"Reglamento Interno y de Convivencia Escolar", detalle:"Actualizado 2026 · PDF", enlace:"#" },
+  ]
+};
+
+document.getElementById('seedBtn').addEventListener('click', async () => {
+  if(!confirm('Esto cargará contenido de ejemplo en tu base de datos. ¿Continuar?')) return;
+  setStatus('pending', 'Cargando datos de ejemplo…');
+  try{
+    await setDoc(settingsRef, { aviso: seedContent.aviso, contacto: seedContent.contacto, redes: seedContent.redes }, { merge:true });
+    for(const key of ['noticias','galeria','calendario','profesores','documentos']){
+      for(const item of seedContent[key]){
+        await addDoc(collection(db, key), { ...item, createdAt: serverTimestamp() });
+      }
+    }
+    await loadSettings();
+    await loadLists();
+    setStatus('saved', 'Datos de ejemplo cargados ✓');
+  }catch(err){
+    console.error(err);
+    setStatus('error', 'Error al cargar datos de ejemplo');
+  }
+});
+
+/* ---------- inicio del panel ---------- */
+let panelStarted = false;
+async function initPanel(){
+  if(panelStarted) return;
+  panelStarted = true;
+  setStatus('pending', 'Cargando datos…');
+  await loadSettings();
+  await loadLists();
+  setStatus('saved', 'Conectado');
+}
+</script>
+</body>
+</html>
