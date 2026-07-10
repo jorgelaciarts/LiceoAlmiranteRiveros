@@ -304,6 +304,7 @@
     display:flex; align-items:center; justify-content:center;
   }
   .gallery-item svg{ width:32px; height:32px; color:rgba(255,255,255,.55); }
+  .gallery-item img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .gallery-item figcaption{
     position:absolute; left:0; right:0; bottom:0;
     background:linear-gradient(to top, rgba(11,35,64,.88), transparent);
@@ -1021,8 +1022,9 @@ function renderGallery(filter){
       fig.className = 'gallery-item';
       fig.dataset.titulo = g.titulo;
       fig.dataset.cat = g.categoria;
-      fig.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
+      fig.innerHTML = g.imagenUrl
+        ? `<img src="${g.imagenUrl}" alt="${g.titulo}" loading="lazy"><figcaption>${g.titulo}</figcaption>`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
         <figcaption>${g.titulo}</figcaption>`;
       fig.addEventListener('click', () => openLightbox(g));
       galleryGrid.appendChild(fig);
@@ -1043,6 +1045,10 @@ const lightboxCat = document.getElementById('lightboxCat');
 function openLightbox(item){
   lightboxTitle.textContent = item.titulo;
   lightboxCat.textContent = 'Categoría: ' + item.categoria.charAt(0).toUpperCase() + item.categoria.slice(1);
+  const media = document.querySelector('.lightbox-media');
+  media.innerHTML = item.imagenUrl
+    ? `<img src="${item.imagenUrl}" alt="${item.titulo}" style="width:100%;height:100%;object-fit:cover;">`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>`;
   lightbox.classList.add('open');
 }
 document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
@@ -1087,7 +1093,7 @@ const newsGrid = document.getElementById('newsGrid');
 function renderNews(noticias){
   newsGrid.innerHTML = noticias.map(n => `
     <article class="news-card reveal in">
-      <div class="news-thumb"><span>${n.categoria}</span></div>
+      <div class="news-thumb" ${n.imagenUrl ? `style="background-image:url('${n.imagenUrl}');background-size:cover;background-position:center;"` : ''}><span>${n.categoria}</span></div>
       <div class="news-body">
         <span class="news-date">${n.fecha}</span>
         <h3>${n.titulo}</h3>
