@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
 
 <style>
   /* ============ TOKENS ============ */
@@ -487,14 +488,14 @@
 <div class="topbar">
   <div class="container">
     <div class="topbar-info">
-      <span>📍 Ernesto Ried 5730, Conchalí</span>
-      <span>📞 +56 2 2623 2223</span>
-      <span>✉️ liceo.almiranteriveros@coresam.cl</span>
+      <span>📍 <span id="tbDireccion">Ernesto Ried 5730, Conchalí</span></span>
+      <span>📞 <span id="tbTelefono">+56 2 2623 2223</span></span>
+      <span>✉️ <span id="tbCorreo">liceo.almiranteriveros@coresam.cl</span></span>
     </div>
     <div class="topbar-social" aria-label="Redes sociales">
-      <a href="#" aria-label="Facebook">FB</a>
-      <a href="#" aria-label="Instagram">IG</a>
-      <a href="#" aria-label="YouTube">YT</a>
+      <a href="#" id="tbFacebook" aria-label="Facebook">FB</a>
+      <a href="#" id="tbInstagram" aria-label="Instagram">IG</a>
+      <a href="#" id="tbYoutube" aria-label="YouTube">YT</a>
     </div>
   </div>
 </div>
@@ -539,7 +540,7 @@
 <div class="ribbon">
   <div class="container">
     <span>📣</span>
-    <span>Reunión de apoderados: martes 15 de julio, 18:30 hrs, Salón Multiuso. Reemplaza este aviso por la información vigente.</span>
+    <span id="ribbonText">Cargando aviso…</span>
   </div>
 </div>
 
@@ -662,35 +663,7 @@
       <h2>Noticias y avisos</h2>
       <p>Mantente al tanto de las actividades, logros y comunicados del liceo. Reemplaza estas tarjetas por las noticias reales a medida que se publiquen.</p>
     </div>
-    <div class="news-grid">
-      <article class="news-card reveal">
-        <div class="news-thumb"><span>Convivencia</span></div>
-        <div class="news-body">
-          <span class="news-date">03 de julio, 2026</span>
-          <h3>Semana de la Educación Artística en el liceo</h3>
-          <p>Estudiantes de todos los niveles presentaron muestras de canto, danza y artes visuales trabajadas durante el primer semestre.</p>
-          <a href="#" class="news-link">Leer noticia completa →</a>
-        </div>
-      </article>
-      <article class="news-card reveal">
-        <div class="news-thumb"><span>Académico</span></div>
-        <div class="news-body">
-          <span class="news-date">26 de junio, 2026</span>
-          <h3>Resultados destacados en la Feria Científica comunal</h3>
-          <p>Equipos de 7° básico a 4° medio representaron al establecimiento con proyectos de sustentabilidad local.</p>
-          <a href="#" class="news-link">Leer noticia completa →</a>
-        </div>
-      </article>
-      <article class="news-card reveal">
-        <div class="news-thumb"><span>Comunidad</span></div>
-        <div class="news-body">
-          <span class="news-date">15 de junio, 2026</span>
-          <h3>Nuevo protocolo de convivencia escolar disponible</h3>
-          <p>Ya puedes revisar y descargar el reglamento actualizado en la sección de documentos institucionales.</p>
-          <a href="#documentos" class="news-link">Ir a documentos →</a>
-        </div>
-      </article>
-    </div>
+    <div class="news-grid" id="newsGrid"></div>
   </div>
 </section>
 
@@ -793,43 +766,7 @@
       <h2>Documentos institucionales</h2>
       <p>Descarga los principales documentos normativos del liceo. Sustituye los enlaces de ejemplo por los archivos PDF reales.</p>
     </div>
-    <div class="docs-list">
-      <div class="doc-row reveal">
-        <div class="doc-ico">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
-        </div>
-        <div class="doc-meta"><strong>Proyecto Educativo Institucional (PEI)</strong><span>Actualizado 2026 · PDF</span></div>
-        <a href="#" class="doc-dl">Descargar</a>
-      </div>
-      <div class="doc-row reveal">
-        <div class="doc-ico">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
-        </div>
-        <div class="doc-meta"><strong>Reglamento Interno y de Convivencia Escolar</strong><span>Actualizado 2026 · PDF</span></div>
-        <a href="#" class="doc-dl">Descargar</a>
-      </div>
-      <div class="doc-row reveal">
-        <div class="doc-ico">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
-        </div>
-        <div class="doc-meta"><strong>Protocolos de actuación (seguridad, maltrato, accidentes)</strong><span>PDF</span></div>
-        <a href="#" class="doc-dl">Descargar</a>
-      </div>
-      <div class="doc-row reveal">
-        <div class="doc-ico">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
-        </div>
-        <div class="doc-meta"><strong>Calendario Escolar Anual</strong><span>Año lectivo 2026 · PDF</span></div>
-        <a href="#" class="doc-dl">Descargar</a>
-      </div>
-      <div class="doc-row reveal">
-        <div class="doc-ico">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>
-        </div>
-        <div class="doc-meta"><strong>Lista de útiles escolares</strong><span>Por nivel · PDF</span></div>
-        <a href="#" class="doc-dl">Descargar</a>
-      </div>
-    </div>
+    <div class="docs-list" id="docsList"></div>
   </div>
 </section>
 
@@ -870,15 +807,15 @@
       <p style="color:#B9C6D6;">Actualiza estos enlaces con las cuentas oficiales del liceo.</p>
     </div>
     <div class="social-row">
-      <a href="#" class="social-tile">
+      <a href="#" id="socialFacebook" class="social-tile">
         <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6v1.9H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg>
         <div><strong>Facebook</strong><span>@liceoalmiranteriveros</span></div>
       </a>
-      <a href="#" class="social-tile">
+      <a href="#" id="socialInstagram" class="social-tile">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
         <div><strong>Instagram</strong><span>@liceoalmiranteriveros</span></div>
       </a>
-      <a href="#" class="social-tile">
+      <a href="#" id="socialYoutube" class="social-tile">
         <svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.6-.5-5.2c-.3-1-1.1-1.8-2.1-2C18.6 4.3 12 4.3 12 4.3s-6.6 0-8.4.5c-1 .2-1.8 1-2.1 2C1 8.4 1 12 1 12s0 3.6.5 5.2c.3 1 1.1 1.8 2.1 2 1.8.5 8.4.5 8.4.5s6.6 0 8.4-.5c1-.2 1.8-1 2.1-2 .5-1.6.5-5.2.5-5.2zM9.8 15.5V8.5l6.4 3.5-6.4 3.5z"/></svg>
         <div><strong>YouTube</strong><span>Liceo Almirante Riveros</span></div>
       </a>
@@ -898,22 +835,22 @@
       <div class="contact-info reveal">
         <div class="item">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <div><strong>Dirección</strong><span>Ernesto Ried 5730, Conchalí, Región Metropolitana</span></div>
+          <div><strong>Dirección</strong><span id="contactDireccion">Ernesto Ried 5730, Conchalí, Región Metropolitana</span></div>
         </div>
         <div class="item">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.5 2.1L8 9.7a16 16 0 006 6l1.2-1.2a2 2 0 012.1-.5c.9.3 1.8.5 2.7.6a2 2 0 011.9 2.3z"/></svg>
-          <div><strong>Teléfono</strong><span>+56 2 2623 2223</span></div>
+          <div><strong>Teléfono</strong><span id="contactTelefono">+56 2 2623 2223</span></div>
         </div>
         <div class="item">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
-          <div><strong>Correo</strong><span>liceo.almiranteriveros@coresam.cl</span></div>
+          <div><strong>Correo</strong><span id="contactCorreo">liceo.almiranteriveros@coresam.cl</span></div>
         </div>
         <div class="item">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-          <div><strong>Horario de atención</strong><span>Lunes a viernes, 8:00–13:30 y 15:00–17:00 hrs</span></div>
+          <div><strong>Horario de atención</strong><span id="contactHorario">Lunes a viernes, 8:00–13:30 y 15:00–17:00 hrs</span></div>
         </div>
         <div class="map-wrap">
-          <iframe title="Mapa del liceo" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          <iframe title="Mapa del liceo" id="mapaIframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
             src="https://www.google.com/maps?q=Ernesto+Ried+5730,+Conchal%C3%AD,+Chile&output=embed"></iframe>
         </div>
       </div>
@@ -995,9 +932,9 @@
       <div>
         <h4>Contacto</h4>
         <ul>
-          <li>Ernesto Ried 5730, Conchalí</li>
-          <li>+56 2 2623 2223</li>
-          <li>liceo.almiranteriveros@coresam.cl</li>
+          <li id="footerDireccion">Ernesto Ried 5730, Conchalí</li>
+          <li id="footerTelefono">+56 2 2623 2223</li>
+          <li id="footerCorreo">liceo.almiranteriveros@coresam.cl</li>
         </ul>
       </div>
     </div>
@@ -1024,7 +961,13 @@
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 /* ===================== NAV ===================== */
 const menuToggle = document.getElementById('menuToggle');
 const primaryNav = document.getElementById('primaryNav');
@@ -1067,30 +1010,17 @@ window.addEventListener('scroll', () => {
 toTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
 
 /* ===================== GALERIA ===================== */
-const galleryData = [
-  { titulo:'Ceremonia de licenciatura 4° medio', cat:'actos' },
-  { titulo:'Acto inicio año escolar', cat:'actos' },
-  { titulo:'Campeonato interescolar de fútbol', cat:'deportes' },
-  { titulo:'Jornada de vóleibol femenino', cat:'deportes' },
-  { titulo:'Muestra de artes visuales', cat:'artes' },
-  { titulo:'Taller de danza — enseñanza básica', cat:'artes' },
-  { titulo:'Presentación Conchalí Big Band', cat:'artes' },
-  { titulo:'Feria científica comunal', cat:'ciencias' },
-  { titulo:'Laboratorio de ciencias en terreno', cat:'ciencias' },
-  { titulo:'Desfile aniversario del liceo', cat:'actos' },
-  { titulo:'Torneo de básquetbol', cat:'deportes' },
-  { titulo:'Taller de actuación', cat:'artes' },
-];
+let galleryData = [];
 const galleryGrid = document.getElementById('galleryGrid');
 function renderGallery(filter){
   galleryGrid.innerHTML = '';
   galleryData
-    .filter(g => filter === 'todas' || g.cat === filter)
+    .filter(g => filter === 'todas' || g.categoria === filter)
     .forEach(g => {
       const fig = document.createElement('figure');
       fig.className = 'gallery-item';
       fig.dataset.titulo = g.titulo;
-      fig.dataset.cat = g.cat;
+      fig.dataset.cat = g.categoria;
       fig.innerHTML = `
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
         <figcaption>${g.titulo}</figcaption>`;
@@ -1098,7 +1028,6 @@ function renderGallery(filter){
       galleryGrid.appendChild(fig);
     });
 }
-renderGallery('todas');
 
 document.querySelectorAll('.chip').forEach(chip => {
   chip.addEventListener('click', () => {
@@ -1113,7 +1042,7 @@ const lightboxTitle = document.getElementById('lightboxTitle');
 const lightboxCat = document.getElementById('lightboxCat');
 function openLightbox(item){
   lightboxTitle.textContent = item.titulo;
-  lightboxCat.textContent = 'Categoría: ' + item.cat.charAt(0).toUpperCase() + item.cat.slice(1);
+  lightboxCat.textContent = 'Categoría: ' + item.categoria.charAt(0).toUpperCase() + item.categoria.slice(1);
   lightbox.classList.add('open');
 }
 document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
@@ -1121,25 +1050,10 @@ lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.c
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape') lightbox.classList.remove('open'); });
 
 /* ===================== CALENDARIO DE EVALUACIONES ===================== */
-const evalData = [
-  { fecha:'14 jul 2026', curso:'1° Medio A', asig:'Matemática', tipo:'Prueba coeficiente 2' },
-  { fecha:'16 jul 2026', curso:'2° Medio B', asig:'Lenguaje y Comunicación', tipo:'Ensayo PAES' },
-  { fecha:'18 jul 2026', curso:'8° Básico A', asig:'Ciencias Naturales', tipo:'Trabajo de laboratorio' },
-  { fecha:'21 jul 2026', curso:'3° Medio A', asig:'Historia y Geografía', tipo:'Prueba coeficiente 1' },
-  { fecha:'23 jul 2026', curso:'4° Medio A', asig:'Educación Ciudadana', tipo:'Disertación grupal' },
-  { fecha:'25 jul 2026', curso:'1° Medio A', asig:'Inglés', tipo:'Prueba oral' },
-  { fecha:'28 jul 2026', curso:'6° Básico B', asig:'Artes Visuales', tipo:'Entrega de proyecto' },
-  { fecha:'30 jul 2026', curso:'2° Medio B', asig:'Biología', tipo:'Prueba coeficiente 1' },
-];
+let evalData = [];
 const filtroCurso = document.getElementById('filtroCurso');
 const calendarBody = document.getElementById('calendarBody');
 const calEmpty = document.getElementById('calEmpty');
-
-[...new Set(evalData.map(e => e.curso))].sort().forEach(curso => {
-  const opt = document.createElement('option');
-  opt.value = curso; opt.textContent = curso;
-  filtroCurso.appendChild(opt);
-});
 
 function renderCalendar(curso){
   const rows = evalData.filter(e => curso === 'todos' || e.curso === curso);
@@ -1147,35 +1061,110 @@ function renderCalendar(curso){
     <tr>
       <td>${e.fecha}</td>
       <td><span class="badge-curso">${e.curso}</span></td>
-      <td>${e.asig}</td>
+      <td>${e.asignatura}</td>
       <td>${e.tipo}</td>
     </tr>`).join('');
   calEmpty.style.display = rows.length ? 'none' : 'block';
 }
 filtroCurso.addEventListener('change', () => renderCalendar(filtroCurso.value));
-renderCalendar('todos');
 
 /* ===================== PROFESORES ===================== */
-const staffData = [
-  { nombre:'Equipo Directivo', rol:'Dirección', depto:'Reemplazar por nombre real' },
-  { nombre:'Jefatura de UTP', rol:'Unidad Técnico-Pedagógica', depto:'Reemplazar por nombre real' },
-  { nombre:'Depto. de Lenguaje', rol:'Docente', depto:'Lenguaje y Comunicación' },
-  { nombre:'Depto. de Matemática', rol:'Docente', depto:'Matemática' },
-  { nombre:'Depto. de Ciencias', rol:'Docente', depto:'Ciencias Naturales' },
-  { nombre:'Depto. de Historia', rol:'Docente', depto:'Historia y Geografía' },
-  { nombre:'Depto. de Artes', rol:'Docente', depto:'Sello Artístico' },
-  { nombre:'Equipo PIE', rol:'Educadora Diferencial', depto:'Programa de Integración Escolar' },
-];
 const staffGrid = document.getElementById('staffGrid');
-staffGrid.innerHTML = staffData.map(s => {
-  const initials = s.nombre.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
-  return `<div class="staff-card">
-    <div class="staff-avatar">${initials}</div>
-    <h4>${s.nombre}</h4>
-    <div class="staff-role">${s.rol}</div>
-    <div class="staff-dept">${s.depto}</div>
-  </div>`;
-}).join('');
+function renderStaff(staffData){
+  staffGrid.innerHTML = staffData.map(s => {
+    const initials = s.nombre.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+    return `<div class="staff-card">
+      <div class="staff-avatar">${initials}</div>
+      <h4>${s.nombre}</h4>
+      <div class="staff-role">${s.rol}</div>
+      <div class="staff-dept">${s.departamento}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ===================== NOTICIAS ===================== */
+const newsGrid = document.getElementById('newsGrid');
+function renderNews(noticias){
+  newsGrid.innerHTML = noticias.map(n => `
+    <article class="news-card reveal in">
+      <div class="news-thumb"><span>${n.categoria}</span></div>
+      <div class="news-body">
+        <span class="news-date">${n.fecha}</span>
+        <h3>${n.titulo}</h3>
+        <p>${n.resumen}</p>
+        <a href="${n.enlace}" class="news-link">Leer noticia completa →</a>
+      </div>
+    </article>`).join('');
+}
+
+/* ===================== DOCUMENTOS ===================== */
+const docIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>`;
+const docsList = document.getElementById('docsList');
+function renderDocs(documentos){
+  docsList.innerHTML = documentos.map(d => `
+    <div class="doc-row reveal in">
+      <div class="doc-ico">${docIcon}</div>
+      <div class="doc-meta"><strong>${d.nombre}</strong><span>${d.detalle}</span></div>
+      <a href="${d.enlace}" class="doc-dl">Descargar</a>
+    </div>`).join('');
+}
+
+/* ===================== CARGA DESDE FIRESTORE ===================== */
+async function getCollectionData(name, orderField){
+  const q = orderField ? query(collection(db, name), orderBy(orderField)) : collection(db, name);
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+async function loadContent(){
+  try{
+    // Configuración general (aviso, contacto, redes)
+    const settingsSnap = await getDoc(doc(db, 'settings', 'site'));
+    const data = settingsSnap.exists() ? settingsSnap.data() : {};
+
+    document.getElementById('ribbonText').textContent = data.aviso || '';
+
+    const c = data.contacto || {};
+    ['tbDireccion','contactDireccion','footerDireccion'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = c.direccion || ''; });
+    ['tbTelefono','contactTelefono','footerTelefono'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = c.telefono || ''; });
+    ['tbCorreo','contactCorreo','footerCorreo'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = c.correo || ''; });
+    const horarioEl = document.getElementById('contactHorario'); if(horarioEl) horarioEl.textContent = c.horario || '';
+    const mapaEl = document.getElementById('mapaIframe');
+    if(mapaEl && c.direccion) mapaEl.src = 'https://www.google.com/maps?q=' + encodeURIComponent(c.direccion) + '&output=embed';
+    const form = document.getElementById('contactForm');
+    if(form && c.correo) form.action = 'mailto:' + c.correo;
+
+    const r = data.redes || {};
+    ['tbFacebook','socialFacebook'].forEach(id => { const el=document.getElementById(id); if(el) el.href = r.facebook || '#'; });
+    ['tbInstagram','socialInstagram'].forEach(id => { const el=document.getElementById(id); if(el) el.href = r.instagram || '#'; });
+    ['tbYoutube','socialYoutube'].forEach(id => { const el=document.getElementById(id); if(el) el.href = r.youtube || '#'; });
+
+    // Colecciones
+    const [noticias, galeria, calendario, profesores, documentos] = await Promise.all([
+      getCollectionData('noticias', 'createdAt'),
+      getCollectionData('galeria', 'createdAt'),
+      getCollectionData('calendario', 'createdAt'),
+      getCollectionData('profesores', 'createdAt'),
+      getCollectionData('documentos', 'createdAt'),
+    ]);
+
+    renderNews(noticias.reverse());
+    galleryData = galeria;
+    renderGallery('todas');
+    evalData = calendario;
+    filtroCurso.innerHTML = '<option value="todos">Todos los cursos</option>' +
+      [...new Set(evalData.map(e => e.curso))].sort().map(curso => `<option value="${curso}">${curso}</option>`).join('');
+    renderCalendar('todos');
+    renderStaff(profesores);
+    renderDocs(documentos);
+
+    document.querySelectorAll('.reveal:not(.in)').forEach(el => revealObs.observe(el));
+  }catch(err){
+    console.error('No se pudo cargar la información desde Firebase', err);
+    document.getElementById('ribbonText').textContent = 'No se pudo conectar con la base de datos. Revisa firebase-config.js.';
+  }
+}
+loadContent();
 
 /* ===================== FAQ ===================== */
 document.querySelectorAll('.faq-item').forEach(item => {
