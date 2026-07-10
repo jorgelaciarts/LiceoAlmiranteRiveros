@@ -98,6 +98,7 @@
     border:1.5px dashed var(--brass); background:#fdf8ec; border-radius:8px; padding:18px 20px;
     margin-bottom:22px; font-size:.86rem; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
   }
+  .img-preview{ width:160px; height:110px; object-fit:cover; border-radius:6px; border:1px solid var(--line); display:block; }
 
   @media (max-width: 820px){
     .layout{ grid-template-columns:1fr; }
@@ -384,8 +385,9 @@ const listConfigs = {
       { key:'titulo', label:'Título', placeholder:'Título de la noticia', full:true },
       { key:'resumen', label:'Resumen', placeholder:'Breve descripción', textarea:true, full:true },
       { key:'enlace', label:'Enlace (opcional)', placeholder:'#' },
+      { key:'imagenUrl', label:'Foto (pega el link de GitHub, opcional)', placeholder:'img/noticia1.jpg', full:true },
     ],
-    blank: () => ({ fecha:'', categoria:'', titulo:'', resumen:'', enlace:'#' }),
+    blank: () => ({ fecha:'', categoria:'', titulo:'', resumen:'', enlace:'#', imagenUrl:'' }),
     title: (item, i) => item.titulo || `Noticia ${i+1}`
   },
   galeria: {
@@ -393,8 +395,9 @@ const listConfigs = {
     fields: [
       { key:'titulo', label:'Título de la foto', placeholder:'Acto de aniversario', full:true },
       { key:'categoria', label:'Categoría', select:['actos','deportes','artes','ciencias'] },
+      { key:'imagenUrl', label:'Foto (pega el link de GitHub)', placeholder:'img/foto1.jpg', full:true },
     ],
-    blank: () => ({ titulo:'', categoria:'actos' }),
+    blank: () => ({ titulo:'', categoria:'actos', imagenUrl:'' }),
     title: (item, i) => item.titulo || `Foto ${i+1}`
   },
   calendario: {
@@ -476,12 +479,17 @@ function renderList(key){
       }
       return `<div class="field" ${widthStyle}><label>${f.label}</label><input data-key="${f.key}" value="${val}" placeholder="${f.placeholder||''}"></div>`;
     }).join('');
+    const imageHtml = cfg.fields.some(f => f.key === 'imagenUrl') && item.imagenUrl ? `
+      <div class="field" style="grid-column:1/-1">
+        <label>Vista previa</label>
+        <img src="${item.imagenUrl}" class="img-preview" alt="" onerror="this.style.display='none'">
+      </div>` : '';
     card.innerHTML = `
       <div class="item-head">
         <span class="tag">${cfg.title(item, i)}</span>
         <button class="btn-danger" data-remove="${item.id}">Eliminar</button>
       </div>
-      <div class="grid2">${fieldsHtml}</div>
+      <div class="grid2">${fieldsHtml}${imageHtml}</div>
     `;
     card.querySelectorAll('[data-key]').forEach(inputEl => {
       inputEl.addEventListener('input', () => {
@@ -489,6 +497,20 @@ function renderList(key){
         card.querySelector('.item-head .tag').textContent = cfg.title(item, i);
         setStatus('pending', 'Editando…');
         getDebouncedUpdate(key, item.id)({ [inputEl.dataset.key]: inputEl.value });
+        if(inputEl.dataset.key === 'imagenUrl'){
+          let preview = card.querySelector('.img-preview');
+          if(!inputEl.value){ if(preview) preview.closest('.field').remove(); return; }
+          if(!preview){
+            const wrap = document.createElement('div');
+            wrap.className = 'field';
+            wrap.style.gridColumn = '1/-1';
+            wrap.innerHTML = `<label>Vista previa</label><img class="img-preview" alt="" onerror="this.style.display='none'">`;
+            card.querySelector('.grid2').appendChild(wrap);
+            preview = wrap.querySelector('.img-preview');
+          }
+          preview.style.display = '';
+          preview.src = inputEl.value;
+        }
       });
     });
     card.querySelector('[data-remove]').addEventListener('click', async () => {
