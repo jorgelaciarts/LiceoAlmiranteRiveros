@@ -44,7 +44,19 @@ Esto significa: **cualquiera puede leer** el contenido (para que el sitio públi
 3. Ve a la pestaña **"Users"** → **"Agregar usuario"**.
 4. Escribe el correo y contraseña con los que administrarás el sitio (por ejemplo, el correo del liceo). Guarda esta contraseña en un lugar seguro — es la que usarás para entrar a `admin.html`.
 
-> Puedes repetir este paso para crear más de un usuario administrador (por ejemplo, para UTP o Dirección).
+> Puedes repetir este paso para crear más de un usuario administrador (por ejemplo, para UTP o Dirección). Todos los usuarios que crees aquí tienen el mismo nivel de acceso total ("master") — no hay niveles de permiso distintos.
+
+## 4.5 Fotos: cómo subirlas (sin costo, sin Firebase Storage)
+
+Firebase Storage ahora exige tarjeta de crédito (plan Blaze), así que las fotos se manejan directamente desde GitHub — es gratis y no necesitas dar datos de pago.
+
+1. En tu repositorio de GitHub, crea una carpeta llamada `img` (Add file → Create new file → escribe `img/.gitkeep` y confirma; eso crea la carpeta).
+2. Entra a la carpeta `img` → **Add file → Upload files** → arrastra tus fotos (jpg o png, ojalá no más de 1-2 MB cada una).
+3. Commit changes.
+4. Haz clic en la foto que subiste dentro de GitHub → botón **"..."** o **"Raw"** → copia esa URL. Se ve algo así:
+   `https://raw.githubusercontent.com/jorgelaciarts/LiceoAlmiranteRiveros/main/img/foto1.jpg`
+5. Ve a `admin.html` → Noticias o Galería → pega esa URL completa en el campo **"Foto"** de la tarjeta correspondiente.
+6. Aparece una vista previa al instante, y el sitio público mostrará la foto real.
 
 ## 5. Registrar la app web y copiar la configuración
 
