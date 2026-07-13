@@ -334,6 +334,11 @@
   }
   .gallery-item svg{ width:32px; height:32px; color:rgba(255,255,255,.55); }
   .gallery-item img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .gallery-count{
+    position:absolute; top:10px; right:10px; z-index:1;
+    background:rgba(11,35,64,.75); color:#fff; font-size:.72rem; font-weight:700;
+    padding:4px 9px; border-radius:999px; backdrop-filter:blur(2px);
+  }
   .gallery-item figcaption{
     position:absolute; left:0; right:0; bottom:0;
     background:linear-gradient(to top, rgba(11,35,64,.88), transparent);
@@ -928,7 +933,9 @@
         </div>
       </div>
 
-      <form class="contact-form reveal" id="contactForm" action="mailto:liceo.almiranteriveros@coresam.cl" method="post" enctype="text/plain">
+      <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/TU_FORM_ID" method="POST">
+        <input type="hidden" name="_subject" value="Nuevo mensaje desde el sitio del Liceo Almirante Riveros">
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
         <div class="form-row">
           <div>
             <label for="nombre">Nombre completo</label>
@@ -958,7 +965,8 @@
           <label for="mensaje">Mensaje</label>
           <textarea id="mensaje" name="mensaje" required></textarea>
         </div>
-        <button type="submit" class="btn btn-navy" style="justify-self:start;">Enviar mensaje</button>
+        <button type="submit" class="btn btn-navy" id="contactSubmitBtn" style="justify-self:start;">Enviar mensaje</button>
+        <p id="contactFormStatus" style="display:none; font-size:.88rem; font-weight:600; margin:4px 0 0;"></p>
       </form>
     </div>
   </div>
@@ -1028,8 +1036,17 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
     </div>
     <div class="lightbox-info">
-      <h3 id="lightboxTitle" style="color:#fff; margin-bottom:4px;"></h3>
-      <p id="lightboxCat" style="color:#B9C6D6; margin:0; font-size:.85rem;"></p>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div>
+          <h3 id="lightboxTitle" style="color:#fff; margin-bottom:4px;"></h3>
+          <p id="lightboxCat" style="color:#B9C6D6; margin:0; font-size:.85rem;"></p>
+        </div>
+        <div id="lightboxNav" style="display:none; align-items:center; gap:10px; flex-shrink:0;">
+          <button id="lightboxPrev" class="hero-news-arrow" aria-label="Foto anterior">‹</button>
+          <span id="lightboxCounter" style="color:#B9C6D6; font-size:.8rem; white-space:nowrap;"></span>
+          <button id="lightboxNext" class="hero-news-arrow" aria-label="Foto siguiente">›</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1082,25 +1099,32 @@ window.addEventListener('scroll', () => {
 });
 toTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
 
-/* ===================== GALERIA ===================== */
+/* ===================== GALERIA (agrupada en álbumes por título) ===================== */
 let galleryData = [];
 const galleryGrid = document.getElementById('galleryGrid');
+
+function groupIntoAlbums(items){
+  const map = new Map();
+  items.forEach(g => {
+    if(!g.imagenUrl) return;
+    const key = (g.titulo || '').trim().toLowerCase() + '|' + (g.categoria || '');
+    if(!map.has(key)) map.set(key, { titulo: g.titulo, categoria: g.categoria, fotos: [] });
+    map.get(key).fotos.push(g.imagenUrl);
+  });
+  return [...map.values()];
+}
+
 function renderGallery(filter){
   galleryGrid.innerHTML = '';
-  galleryData
-    .filter(g => filter === 'todas' || g.categoria === filter)
-    .forEach(g => {
-      const fig = document.createElement('figure');
-      fig.className = 'gallery-item';
-      fig.dataset.titulo = g.titulo;
-      fig.dataset.cat = g.categoria;
-      fig.innerHTML = g.imagenUrl
-        ? `<img src="${g.imagenUrl}" alt="${g.titulo}" loading="lazy"><figcaption>${g.titulo}</figcaption>`
-        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>
-        <figcaption>${g.titulo}</figcaption>`;
-      fig.addEventListener('click', () => openLightbox(g));
-      galleryGrid.appendChild(fig);
-    });
+  const albums = groupIntoAlbums(galleryData.filter(g => filter === 'todas' || g.categoria === filter));
+  albums.forEach(album => {
+    const fig = document.createElement('figure');
+    fig.className = 'gallery-item';
+    const badge = album.fotos.length > 1 ? `<span class="gallery-count">📷 ${album.fotos.length}</span>` : '';
+    fig.innerHTML = `<img src="${album.fotos[0]}" alt="${album.titulo}" loading="lazy">${badge}<figcaption>${album.titulo}</figcaption>`;
+    fig.addEventListener('click', () => openLightbox(album));
+    galleryGrid.appendChild(fig);
+  });
 }
 
 document.querySelectorAll('.chip').forEach(chip => {
@@ -1114,15 +1138,38 @@ document.querySelectorAll('.chip').forEach(chip => {
 const lightbox = document.getElementById('lightbox');
 const lightboxTitle = document.getElementById('lightboxTitle');
 const lightboxCat = document.getElementById('lightboxCat');
-function openLightbox(item){
-  lightboxTitle.textContent = item.titulo;
-  lightboxCat.textContent = 'Categoría: ' + item.categoria.charAt(0).toUpperCase() + item.categoria.slice(1);
+let currentAlbum = null;
+let currentPhotoIndex = 0;
+
+function renderLightboxPhoto(){
   const media = document.querySelector('.lightbox-media');
-  media.innerHTML = item.imagenUrl
-    ? `<img src="${item.imagenUrl}" alt="${item.titulo}" style="width:100%;height:100%;object-fit:cover;">`
-    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg>`;
+  const url = currentAlbum.fotos[currentPhotoIndex];
+  media.innerHTML = `<img src="${url}" alt="${currentAlbum.titulo}" style="width:100%;height:100%;object-fit:cover;">`;
+  const nav = document.getElementById('lightboxNav');
+  if(currentAlbum.fotos.length > 1){
+    nav.style.display = 'flex';
+    document.getElementById('lightboxCounter').textContent = `${currentPhotoIndex + 1} / ${currentAlbum.fotos.length}`;
+  }else{
+    nav.style.display = 'none';
+  }
+}
+
+function openLightbox(album){
+  currentAlbum = album;
+  currentPhotoIndex = 0;
+  lightboxTitle.textContent = album.titulo;
+  lightboxCat.textContent = 'Categoría: ' + album.categoria.charAt(0).toUpperCase() + album.categoria.slice(1);
+  renderLightboxPhoto();
   lightbox.classList.add('open');
 }
+document.getElementById('lightboxPrev').addEventListener('click', () => {
+  currentPhotoIndex = (currentPhotoIndex - 1 + currentAlbum.fotos.length) % currentAlbum.fotos.length;
+  renderLightboxPhoto();
+});
+document.getElementById('lightboxNext').addEventListener('click', () => {
+  currentPhotoIndex = (currentPhotoIndex + 1) % currentAlbum.fotos.length;
+  renderLightboxPhoto();
+});
 document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
 lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('open'); });
 document.addEventListener('keydown', (e) => { if(e.key === 'Escape') lightbox.classList.remove('open'); });
@@ -1263,7 +1310,6 @@ async function loadContent(){
     const mapaEl = document.getElementById('mapaIframe');
     if(mapaEl && c.direccion) mapaEl.src = 'https://www.google.com/maps?q=' + encodeURIComponent(c.direccion) + '&output=embed';
     const form = document.getElementById('contactForm');
-    if(form && c.correo) form.action = 'mailto:' + c.correo;
 
     const r = data.redes || {};
     ['tbFacebook','socialFacebook'].forEach(id => { const el=document.getElementById(id); if(el) el.href = r.facebook || '#'; });
@@ -1316,10 +1362,38 @@ document.querySelectorAll('.faq-item').forEach(item => {
   });
 });
 
-/* ===================== CONTACT FORM ===================== */
-document.getElementById('contactForm').addEventListener('submit', function(e){
-  // mailto: forms don't submit reliably from JS-driven flows in all browsers;
-  // this just confirms to the user their client should open.
+/* ===================== CONTACT FORM (Formspree) ===================== */
+const contactFormEl = document.getElementById('contactForm');
+const contactStatus = document.getElementById('contactFormStatus');
+const contactSubmitBtn = document.getElementById('contactSubmitBtn');
+
+contactFormEl.addEventListener('submit', async function(e){
+  e.preventDefault();
+  contactSubmitBtn.disabled = true;
+  contactSubmitBtn.textContent = 'Enviando…';
+  contactStatus.style.display = 'block';
+  contactStatus.style.color = 'var(--ink-soft)';
+  contactStatus.textContent = 'Enviando tu mensaje…';
+  try{
+    const res = await fetch(contactFormEl.action, {
+      method: 'POST',
+      body: new FormData(contactFormEl),
+      headers: { 'Accept': 'application/json' }
+    });
+    if(res.ok){
+      contactStatus.style.color = 'var(--teal)';
+      contactStatus.textContent = '¡Mensaje enviado! Te responderemos a la brevedad.';
+      contactFormEl.reset();
+    }else{
+      throw new Error('Formspree respondió con error');
+    }
+  }catch(err){
+    console.error(err);
+    contactStatus.style.color = '#B3452C';
+    contactStatus.textContent = 'No se pudo enviar el mensaje. Intenta nuevamente o escríbenos directo por correo.';
+  }
+  contactSubmitBtn.disabled = false;
+  contactSubmitBtn.textContent = 'Enviar mensaje';
 });
 
 /* footer year */
