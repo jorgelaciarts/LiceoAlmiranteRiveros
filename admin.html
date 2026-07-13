@@ -164,6 +164,7 @@
       <button data-panel="redes">🔗 Redes sociales</button>
       <button data-panel="noticias">📰 Noticias</button>
       <button data-panel="galeria">🖼 Galería</button>
+      <button data-panel="videos">🎬 Videos</button>
       <button data-panel="calendario">🗓 Calendario</button>
       <button data-panel="profesores">🎓 Profesores</button>
       <button data-panel="documentos">📄 Documentos</button>
@@ -224,9 +225,29 @@
       <!-- GALERIA -->
       <section class="panel" id="panel-galeria">
         <h2>Galería institucional</h2>
-        <p class="hint">Cada foto se muestra como tarjeta con título y categoría. Para fotos reales, pídeme que conecte imágenes subidas al repositorio.</p>
+        <p class="hint">Cada foto se muestra como tarjeta con título y categoría.</p>
+
+        <div class="card" id="bulkGaleriaCard">
+          <h3 style="font-size:1rem; margin-bottom:6px;">📥 Carga masiva</h3>
+          <p class="hint" style="margin-bottom:12px;">Pega una foto por línea, con este formato: <code>Título | categoría | link</code>. La categoría es opcional (actos, deportes, artes o ciencias; si la omites o la escribes mal, queda como "actos").</p>
+          <div class="field">
+            <textarea id="bulkGaleriaInput" rows="6" placeholder="Acto de aniversario | actos | https://raw.githubusercontent.com/jorgelaciarts/LiceoAlmiranteRiveros/main/img/acto1.jpg
+Campeonato de fútbol | deportes | https://raw.githubusercontent.com/jorgelaciarts/LiceoAlmiranteRiveros/main/img/deportes1.jpg"></textarea>
+          </div>
+          <button class="btn-brass" id="bulkGaleriaBtn" type="button">Agregar todas</button>
+          <span class="save-state" id="bulkGaleriaStatus" style="margin-left:10px;"></span>
+        </div>
+
         <div id="galeriaList"></div>
         <button class="add-btn" data-add="galeria">+ Agregar foto</button>
+      </section>
+
+      <!-- VIDEOS -->
+      <section class="panel" id="panel-videos">
+        <h2>Videos institucionales</h2>
+        <p class="hint">Pega el link de YouTube tal cual lo copias de la barra de direcciones o del botón "Compartir" (funciona con youtube.com/watch?v=..., youtu.be/... y Shorts).</p>
+        <div id="videosList"></div>
+        <button class="add-btn" data-add="videos">+ Agregar video</button>
       </section>
 
       <!-- CALENDARIO -->
@@ -431,6 +452,16 @@ const listConfigs = {
     blank: () => ({ nombre:'', detalle:'', enlace:'#' }),
     title: (item, i) => item.nombre || `Documento ${i+1}`
   },
+  videos: {
+    container: 'videosList', empty: 'Aún no hay videos registrados.',
+    fields: [
+      { key:'titulo', label:'Título del video', placeholder:'Acto de aniversario 2026', full:true },
+      { key:'descripcion', label:'Descripción (opcional)', placeholder:'Breve descripción del video', textarea:true, full:true },
+      { key:'url', label:'Link de YouTube', placeholder:'https://www.youtube.com/watch?v=...', full:true },
+    ],
+    blank: () => ({ titulo:'', descripcion:'', url:'' }),
+    title: (item, i) => item.titulo || `Video ${i+1}`
+  },
 };
 
 const state = { noticias:[], galeria:[], calendario:[], profesores:[], documentos:[] };
@@ -544,6 +575,45 @@ document.querySelectorAll('[data-add]').forEach(btn => {
       setStatus('error', 'Error al crear');
     }
   });
+});
+
+const CATEGORIAS_VALIDAS = ['actos','deportes','artes','ciencias'];
+document.getElementById('bulkGaleriaBtn').addEventListener('click', async () => {
+  const textarea = document.getElementById('bulkGaleriaInput');
+  const statusEl = document.getElementById('bulkGaleriaStatus');
+  const lines = textarea.value.split('\n').map(l => l.trim()).filter(Boolean);
+  if(!lines.length){ statusEl.textContent = 'Pega al menos una línea.'; return; }
+
+  const items = lines.map(line => {
+    const parts = line.split('|').map(p => p.trim());
+    const titulo = parts[0] || '';
+    let categoria = (parts[1] || '').toLowerCase();
+    if(!CATEGORIAS_VALIDAS.includes(categoria)) categoria = 'actos';
+    const imagenUrl = parts[2] || '';
+    return { titulo, categoria, imagenUrl };
+  }).filter(it => it.titulo && it.imagenUrl);
+
+  if(!items.length){
+    statusEl.textContent = 'No se reconoció ninguna línea válida (falta título o link).';
+    return;
+  }
+
+  document.getElementById('bulkGaleriaBtn').disabled = true;
+  let ok = 0;
+  for(const item of items){
+    try{
+      const ref = await addDoc(collection(db, 'galeria'), { ...item, createdAt: serverTimestamp() });
+      state.galeria.push({ id: ref.id, ...item });
+      ok++;
+      statusEl.textContent = `Cargando… ${ok}/${items.length}`;
+    }catch(err){
+      console.error(err);
+    }
+  }
+  renderList('galeria');
+  textarea.value = '';
+  statusEl.textContent = `✓ ${ok} de ${items.length} fotos agregadas.`;
+  document.getElementById('bulkGaleriaBtn').disabled = false;
 });
 
 async function loadLists(){
