@@ -199,6 +199,35 @@
   .hero .lede{ color:#D9E2ED; font-size:1.15rem; max-width:46ch; }
   .hero-actions{ display:flex; gap:14px; margin:30px 0 44px; flex-wrap:wrap; }
 
+  .hero-news{
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18);
+    border-left:3px solid var(--brass); border-radius:6px;
+    padding:26px 28px; margin:22px 0 30px; min-height:168px;
+    display:flex; flex-direction:column; justify-content:space-between; gap:18px;
+  }
+  .hero-news-slide{ animation:heroNewsFade .4s ease; }
+  @keyframes heroNewsFade{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:none; } }
+  .hero-news-tag{
+    display:inline-block; background:var(--brass); color:var(--navy-deep); font-weight:800; font-size:.68rem;
+    text-transform:uppercase; letter-spacing:.06em; padding:4px 10px; border-radius:2px; margin-bottom:12px;
+  }
+  .hero-news-title{ color:#fff; font-family:'Fraunces',serif; font-size:1.5rem; font-weight:600; margin:0 0 8px; line-height:1.25; }
+  .hero-news-excerpt{ color:#CBD8E6; font-size:.92rem; margin:0 0 12px; max-width:56ch; }
+  .hero-news-link{ color:var(--brass-light); font-weight:700; font-size:.86rem; text-decoration:none; }
+  .hero-news-link:hover{ text-decoration:underline; }
+  .hero-news-controls{ display:flex; align-items:center; gap:14px; }
+  .hero-news-arrow{
+    width:30px; height:30px; border-radius:50%; border:1px solid rgba(255,255,255,.3);
+    background:rgba(255,255,255,.06); color:#fff; cursor:pointer; font-size:1.1rem; line-height:1;
+    display:flex; align-items:center; justify-content:center; transition:background .15s;
+  }
+  .hero-news-arrow:hover{ background:rgba(255,255,255,.18); }
+  .hero-news-dots{ display:flex; gap:7px; }
+  .hero-news-dots button{
+    width:8px; height:8px; border-radius:50%; border:none; background:rgba(255,255,255,.3); padding:0; cursor:pointer;
+  }
+  .hero-news-dots button.active{ background:var(--brass); }
+
   .hero-stats{
     display:grid; grid-template-columns:repeat(3,1fr);
     border-top:1px solid rgba(255,255,255,.18);
@@ -588,13 +617,22 @@
   </svg>
   <div class="container hero-inner">
     <div class="reveal in">
-      <div class="hero-eyebrow">Establecimiento municipal · Científico-humanista</div>
-      <h1>Formación integral con rumbo propio, desde 2007 al servicio de Conchalí</h1>
-      <p class="lede">Educación laica, gratuita y de calidad para estudiantes de Prekínder a 4° Medio, con un sello artístico distintivo y foco en el pensamiento crítico y la conciencia medioambiental.</p>
-      <div class="hero-actions">
-        <a href="#noticias" class="btn btn-brass">Ver noticias del liceo</a>
-        <a href="#nosotros" class="btn btn-outline">Conocer el proyecto educativo</a>
+      <div class="hero-eyebrow">Liceo Almirante Riveros · Conchalí</div>
+
+      <div class="hero-news" id="heroNews">
+        <div class="hero-news-slide" id="heroNewsSlide">
+          <span class="hero-news-tag">Noticias</span>
+          <h1 class="hero-news-title">Cargando noticias destacadas…</h1>
+          <p class="hero-news-excerpt">Un momento por favor.</p>
+          <a href="#noticias" class="hero-news-link" id="heroNewsLink">Ver todas las noticias →</a>
+        </div>
+        <div class="hero-news-controls" id="heroNewsControls" style="display:none;">
+          <button class="hero-news-arrow" id="heroNewsPrev" aria-label="Noticia anterior">‹</button>
+          <div class="hero-news-dots" id="heroNewsDots"></div>
+          <button class="hero-news-arrow" id="heroNewsNext" aria-label="Noticia siguiente">›</button>
+        </div>
       </div>
+
       <div class="hero-stats">
         <div><strong>Prek. – 4° Medio</strong><span>Niveles impartidos</span></div>
         <div><strong>Jornada diurna</strong><span>Régimen JEC</span></div>
@@ -1149,6 +1187,59 @@ function renderDocs(documentos){
     </div>`).join('');
 }
 
+/* ===================== BANNER DE NOTICIAS DESTACADAS (hero) ===================== */
+let heroNewsItems = [];
+let heroNewsIndex = 0;
+let heroNewsTimer = null;
+
+function showHeroNewsSlide(i){
+  if(!heroNewsItems.length) return;
+  heroNewsIndex = (i + heroNewsItems.length) % heroNewsItems.length;
+  const n = heroNewsItems[heroNewsIndex];
+  const slide = document.getElementById('heroNewsSlide');
+  slide.innerHTML = `
+    <span class="hero-news-tag">${n.categoria || 'Noticias'}</span>
+    <h1 class="hero-news-title">${n.titulo}</h1>
+    <p class="hero-news-excerpt">${n.resumen || ''}</p>
+    <a href="${n.enlace && n.enlace !== '#' ? n.enlace : '#noticias'}" class="hero-news-link">Leer noticia completa →</a>
+  `;
+  slide.classList.remove('hero-news-slide');
+  void slide.offsetWidth;
+  slide.classList.add('hero-news-slide');
+  document.querySelectorAll('#heroNewsDots button').forEach((dot, idx) => dot.classList.toggle('active', idx === heroNewsIndex));
+}
+
+function startHeroNewsRotation(){
+  clearInterval(heroNewsTimer);
+  if(heroNewsItems.length > 1){
+    heroNewsTimer = setInterval(() => showHeroNewsSlide(heroNewsIndex + 1), 7000);
+  }
+}
+
+function renderHeroNews(noticias){
+  heroNewsItems = noticias.slice(0, 5);
+  const controls = document.getElementById('heroNewsControls');
+  const dotsWrap = document.getElementById('heroNewsDots');
+  if(!heroNewsItems.length){
+    document.getElementById('heroNewsSlide').innerHTML = `
+      <span class="hero-news-tag">Bienvenidos</span>
+      <h1 class="hero-news-title">Liceo Almirante Riveros</h1>
+      <p class="hero-news-excerpt">Formación científico-humanista con vocación artística, al servicio de Conchalí.</p>
+      <a href="#nosotros" class="hero-news-link">Conocer el proyecto educativo →</a>`;
+    controls.style.display = 'none';
+    return;
+  }
+  dotsWrap.innerHTML = heroNewsItems.map((_, i) => `<button aria-label="Ver noticia ${i+1}"></button>`).join('');
+  dotsWrap.querySelectorAll('button').forEach((dot, i) => dot.addEventListener('click', () => { showHeroNewsSlide(i); startHeroNewsRotation(); }));
+  controls.style.display = heroNewsItems.length > 1 ? 'flex' : 'none';
+  showHeroNewsSlide(0);
+  startHeroNewsRotation();
+}
+document.getElementById('heroNewsPrev').addEventListener('click', () => { showHeroNewsSlide(heroNewsIndex - 1); startHeroNewsRotation(); });
+document.getElementById('heroNewsNext').addEventListener('click', () => { showHeroNewsSlide(heroNewsIndex + 1); startHeroNewsRotation(); });
+document.getElementById('heroNews').addEventListener('mouseenter', () => clearInterval(heroNewsTimer));
+document.getElementById('heroNews').addEventListener('mouseleave', () => startHeroNewsRotation());
+
 /* ===================== CARGA DESDE FIRESTORE ===================== */
 async function getCollectionData(name, orderField){
   const q = orderField ? query(collection(db, name), orderBy(orderField)) : collection(db, name);
@@ -1188,7 +1279,9 @@ async function loadContent(){
       getCollectionData('documentos', 'createdAt'),
     ]);
 
-    renderNews(noticias.reverse());
+    const noticiasOrdenadas = noticias.reverse();
+    renderNews(noticiasOrdenadas);
+    renderHeroNews(noticiasOrdenadas);
     galleryData = galeria;
     renderGallery('todas');
     evalData = calendario;
