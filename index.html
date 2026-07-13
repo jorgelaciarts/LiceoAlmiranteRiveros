@@ -266,7 +266,7 @@
 
   /* ============ QUICK LINKS ============ */
   .quicklinks{ background:var(--paper); padding:56px 0; }
-  .quick-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+  .quick-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:16px; }
   .quick-card{
     background:var(--paper-white); border:1px solid var(--line); border-radius:var(--radius);
     padding:22px 18px; text-decoration:none; color:var(--ink);
@@ -315,6 +315,18 @@
   .news-link:hover{ text-decoration:underline; }
   @media (max-width:920px){ .news-grid{ grid-template-columns:1fr 1fr; } }
   @media (max-width:620px){ .news-grid{ grid-template-columns:1fr; } }
+
+  .videos-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:26px; }
+  .video-card{
+    background:var(--paper-white); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; box-shadow:var(--shadow-card);
+  }
+  .video-frame{ position:relative; width:100%; aspect-ratio:16/9; background:#000; }
+  .video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .video-body{ padding:16px 20px 20px; }
+  .video-body h3{ font-size:1rem; margin-bottom:4px; }
+  .video-body p{ color:var(--ink-soft); font-size:.88rem; margin:0; }
+  @media (max-width:760px){ .videos-grid{ grid-template-columns:1fr; } }
 
   /* ============ GALERIA ============ */
   .gallery-controls{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px; }
@@ -590,6 +602,7 @@
       <a href="#nosotros">Nosotros</a>
       <a href="#noticias">Noticias</a>
       <a href="#galeria">Galería</a>
+      <a href="#videos">Videos</a>
       <a href="#calendario">Calendario</a>
       <a href="#profesores">Profesores</a>
       <a href="#documentos">Documentos</a>
@@ -703,6 +716,11 @@
       <strong>Galería</strong>
       <span>Fotografías de actos, deportes y talleres</span>
     </a>
+    <a href="#videos" class="quick-card">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M10 9.5l5 2.5-5 2.5z"/></svg>
+      <strong>Videos</strong>
+      <span>Actos y presentaciones en video</span>
+    </a>
     <a href="#calendario" class="quick-card">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="1.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
       <strong>Calendario</strong>
@@ -793,6 +811,18 @@
     <div class="gallery-grid" id="galleryGrid">
       <!-- items injected by JS -->
     </div>
+  </div>
+</section>
+
+<!-- ============ VIDEOS ============ -->
+<section class="section" id="videos" style="background:var(--paper);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Vida escolar en video</div>
+      <h2>Videos institucionales</h2>
+      <p>Actos, presentaciones y momentos destacados del liceo, en video.</p>
+    </div>
+    <div class="videos-grid" id="videosGrid"></div>
   </div>
 </section>
 
@@ -1225,6 +1255,43 @@ function renderNews(noticias){
     </article>`).join('');
 }
 
+/* ===================== VIDEOS ===================== */
+const videosGrid = document.getElementById('videosGrid');
+function getYouTubeId(url){
+  if(!url) return null;
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=)([\w-]{11})/,
+    /(?:youtu\.be\/)([\w-]{11})/,
+    /(?:youtube\.com\/embed\/)([\w-]{11})/,
+    /(?:youtube\.com\/shorts\/)([\w-]{11})/,
+  ];
+  for(const re of patterns){
+    const m = url.match(re);
+    if(m) return m[1];
+  }
+  return null;
+}
+function renderVideos(videos){
+  const valid = videos.filter(v => getYouTubeId(v.url));
+  if(!valid.length){
+    videosGrid.innerHTML = `<p style="color:var(--ink-soft);">Todavía no hay videos publicados.</p>`;
+    return;
+  }
+  videosGrid.innerHTML = valid.map(v => {
+    const id = getYouTubeId(v.url);
+    return `
+      <div class="video-card">
+        <div class="video-frame">
+          <iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${v.titulo}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-body">
+          <h3>${v.titulo}</h3>
+          <p>${v.descripcion || ''}</p>
+        </div>
+      </div>`;
+  }).join('');
+}
+
 /* ===================== DOCUMENTOS ===================== */
 const docIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>`;
 const docsList = document.getElementById('docsList');
@@ -1320,12 +1387,13 @@ async function loadContent(){
     ['tbYoutube','socialYoutube'].forEach(id => { const el=document.getElementById(id); if(el) el.href = r.youtube || '#'; });
 
     // Colecciones
-    const [noticias, galeria, calendario, profesores, documentos] = await Promise.all([
+    const [noticias, galeria, calendario, profesores, documentos, videos] = await Promise.all([
       getCollectionData('noticias', 'createdAt'),
       getCollectionData('galeria', 'createdAt'),
       getCollectionData('calendario', 'createdAt'),
       getCollectionData('profesores', 'createdAt'),
       getCollectionData('documentos', 'createdAt'),
+      getCollectionData('videos', 'createdAt'),
     ]);
 
     const noticiasOrdenadas = noticias.reverse();
@@ -1339,6 +1407,7 @@ async function loadContent(){
     renderCalendar('todos');
     renderStaff(profesores);
     renderDocs(documentos);
+    renderVideos(videos.reverse());
 
     document.querySelectorAll('.reveal:not(.in)').forEach(el => revealObs.observe(el));
   }catch(err){
