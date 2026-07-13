@@ -124,9 +124,9 @@
   }
   .topbar-info{display:flex; gap:20px; flex-wrap:wrap;}
   .topbar-info span{display:inline-flex; align-items:center; gap:6px;}
-  .topbar-social{display:flex; gap:12px;}
-  .topbar-social a{opacity:.85; transition:opacity .15s;}
-  .topbar-social a:hover{opacity:1;}
+  .topbar-social{display:flex; gap:14px; align-items:center;}
+  .topbar-social a{ color:#CBD8E6; opacity:.85; transition:opacity .15s, color .15s; display:inline-flex; }
+  .topbar-social a:hover{ opacity:1; color:var(--brass-light); }
 
   /* ============ HEADER / NAV ============ */
   header.site{
@@ -522,9 +522,9 @@
       <span>✉️ <span id="tbCorreo">liceo.almiranteriveros@coresam.cl</span></span>
     </div>
     <div class="topbar-social" aria-label="Redes sociales">
-      <a href="#" id="tbFacebook" aria-label="Facebook">FB</a>
-      <a href="#" id="tbInstagram" aria-label="Instagram">IG</a>
-      <a href="#" id="tbYoutube" aria-label="YouTube">YT</a>
+      <a href="#" id="tbFacebook" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6v1.9H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg></a>
+      <a href="#" id="tbInstagram" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg></a>
+      <a href="#" id="tbYoutube" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M23 12s0-3.6-.5-5.2c-.3-1-1.1-1.8-2.1-2C18.6 4.3 12 4.3 12 4.3s-6.6 0-8.4.5c-1 .2-1.8 1-2.1 2C1 8.4 1 12 1 12s0 3.6.5 5.2c.3 1 1.1 1.8 2.1 2 1.8.5 8.4.5 8.4.5s6.6 0 8.4-.5c1-.2 1.8-1 2.1-2 .5-1.6.5-5.2.5-5.2zM9.8 15.5V8.5l6.4 3.5-6.4 3.5z"/></svg></a>
     </div>
   </div>
 </div>
@@ -721,7 +721,7 @@
     <div class="section-head reveal">
       <div class="eyebrow">Bitácora institucional</div>
       <h2>Noticias y avisos</h2>
-      <p>Mantente al tanto de las actividades, logros y comunicados del liceo. Reemplaza estas tarjetas por las noticias reales a medida que se publiquen.</p>
+      <p>Mantente al tanto de las actividades, logros y comunicados del liceo.</p>
     </div>
     <div class="news-grid" id="newsGrid"></div>
   </div>
@@ -760,7 +760,7 @@
     <div class="section-head reveal" style="max-width:680px;">
       <div class="eyebrow" style="color:var(--brass-light);">Bitácora académica</div>
       <h2 style="color:#fff;">Calendario de evaluaciones</h2>
-      <p style="color:#B9C6D6;">Filtra por curso para revisar las próximas pruebas y trabajos. Actualiza esta tabla cada semestre con las fechas oficiales de UTP.</p>
+      <p style="color:#B9C6D6;">Filtra por curso para revisar las próximas pruebas y trabajos.</p>
     </div>
 
     <div class="calendar-panel reveal">
@@ -791,7 +791,7 @@
     <div class="section-head reveal">
       <div class="eyebrow">Nuestro equipo</div>
       <h2>Cuerpo docente y profesionales de apoyo</h2>
-      <p>Un equipo comprometido con el aprendizaje y el bienestar de cada estudiante. Reemplaza estas fichas por el listado y fotografías reales del liceo.</p>
+      <p>Un equipo comprometido con el aprendizaje y el bienestar de cada estudiante.</p>
     </div>
     <div class="staff-grid" id="staffGrid"></div>
   </div>
@@ -824,7 +824,7 @@
     <div class="section-head reveal">
       <div class="eyebrow">Transparencia</div>
       <h2>Documentos institucionales</h2>
-      <p>Descarga los principales documentos normativos del liceo. Sustituye los enlaces de ejemplo por los archivos PDF reales.</p>
+      <p>Descarga los principales documentos normativos del liceo.</p>
     </div>
     <div class="docs-list" id="docsList"></div>
   </div>
@@ -975,7 +975,7 @@
     </div>
     <div class="footer-bottom">
       <span>© <span id="year"></span> Liceo Almirante Riveros. Todos los derechos reservados.</span>
-      <span>Sitio institucional no oficial — reemplaza el contenido de ejemplo por información verificada del establecimiento.</span>
+      <span>Sitio desarrollado para la comunidad del Liceo Almirante Riveros, Conchalí.</span>
     </div>
   </div>
 </footer>
