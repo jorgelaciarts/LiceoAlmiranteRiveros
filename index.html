@@ -123,7 +123,12 @@
     padding-top:5px; padding-bottom:5px; gap:16px; flex-wrap:wrap;
   }
   .topbar-info{display:flex; gap:16px; flex-wrap:wrap;}
-  .topbar-info span{display:inline-flex; align-items:center; gap:5px;}
+  .topbar-info a{
+    display:inline-flex; align-items:center; gap:5px;
+    color:#CBD8E6; text-decoration:none; transition:color .15s;
+  }
+  .topbar-info a:hover{ color:var(--brass-light); }
+  .topbar-info svg{ flex-shrink:0; opacity:.85; }
   .topbar-social{display:flex; gap:12px; align-items:center;}
   .topbar-social a{ color:#CBD8E6; opacity:.85; transition:opacity .15s, color .15s; display:inline-flex; }
   .topbar-social a svg{ width:14px; height:14px; }
@@ -573,9 +578,18 @@
 <div class="topbar">
   <div class="container">
     <div class="topbar-info">
-      <span>📍 <span id="tbDireccion">Ernesto Ried 5730, Conchalí</span></span>
-      <span>📞 <span id="tbTelefono">+56 2 2623 2223</span></span>
-      <span>✉️ <span id="tbCorreo">liceo.almiranteriveros@coresam.cl</span></span>
+      <a href="https://www.google.com/maps/search/?api=1&query=Ernesto+Ried+5730+Conchali" id="tbDireccionLink" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="13" height="13"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="tbDireccion">Ernesto Ried 5730, Conchalí</span>
+      </a>
+      <a href="tel:+56226232223" id="tbTelefonoLink">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="13" height="13"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.3 1.8.6 2.7a2 2 0 01-.5 2.1L8 9.7a16 16 0 006 6l1.2-1.2a2 2 0 012.1-.5c.9.3 1.8.5 2.7.6a2 2 0 011.9 2.3z"/></svg>
+        <span id="tbTelefono">+56 2 2623 2223</span>
+      </a>
+      <a href="mailto:liceo.almiranteriveros@coresam.cl" id="tbCorreoLink">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="13" height="13"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>
+        <span id="tbCorreo">liceo.almiranteriveros@coresam.cl</span>
+      </a>
     </div>
     <div class="topbar-social" aria-label="Redes sociales">
       <a href="#" id="tbFacebook" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6v1.9H16l-.4 2.9h-2.1v7A10 10 0 0022 12z"/></svg></a>
@@ -656,7 +670,7 @@
         <div><strong>Prek. – 4° Medio</strong><span>Niveles impartidos</span></div>
         <div><strong>Jornada diurna</strong><span>Régimen JEC</span></div>
         <div><strong>SLEP Los Libertadores</strong><span>Dependencia</span></div>
-        <div><strong>PIE</strong><span>Programa de Integración Escolar</span></div>
+        <div><strong style="font-size:1.05rem;">Programa de Integración Escolar</strong><span>PIE</span></div>
       </div>
     </div>
 
@@ -1379,6 +1393,12 @@ async function loadContent(){
     ['tbDireccion','contactDireccion','footerDireccion'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = c.direccion || ''; });
     ['tbTelefono','contactTelefono','footerTelefono'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = c.telefono || ''; });
     ['tbCorreo','contactCorreo','footerCorreo'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = c.correo || ''; });
+    const tbDireccionLink = document.getElementById('tbDireccionLink');
+    if(tbDireccionLink && c.direccion) tbDireccionLink.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.direccion);
+    const tbTelefonoLink = document.getElementById('tbTelefonoLink');
+    if(tbTelefonoLink && c.telefono) tbTelefonoLink.href = 'tel:' + c.telefono.replace(/[^\d+]/g, '');
+    const tbCorreoLink = document.getElementById('tbCorreoLink');
+    if(tbCorreoLink && c.correo) tbCorreoLink.href = 'mailto:' + c.correo;
     const horarioEl = document.getElementById('contactHorario'); if(horarioEl) horarioEl.textContent = c.horario || '';
     const mapaEl = document.getElementById('mapaIframe');
     if(mapaEl && c.direccion) mapaEl.src = 'https://www.google.com/maps?q=' + encodeURIComponent(c.direccion) + '&output=embed';
