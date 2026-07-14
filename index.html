@@ -116,16 +116,17 @@
   .topbar{
     background:var(--navy-deep);
     color:#CBD8E6;
-    font-size:.8rem;
+    font-size:.72rem;
   }
   .topbar .container{
     display:flex; justify-content:space-between; align-items:center;
-    padding-top:8px; padding-bottom:8px; gap:16px; flex-wrap:wrap;
+    padding-top:5px; padding-bottom:5px; gap:16px; flex-wrap:wrap;
   }
-  .topbar-info{display:flex; gap:20px; flex-wrap:wrap;}
-  .topbar-info span{display:inline-flex; align-items:center; gap:6px;}
-  .topbar-social{display:flex; gap:14px; align-items:center;}
+  .topbar-info{display:flex; gap:16px; flex-wrap:wrap;}
+  .topbar-info span{display:inline-flex; align-items:center; gap:5px;}
+  .topbar-social{display:flex; gap:12px; align-items:center;}
   .topbar-social a{ color:#CBD8E6; opacity:.85; transition:opacity .15s, color .15s; display:inline-flex; }
+  .topbar-social a svg{ width:14px; height:14px; }
   .topbar-social a:hover{ opacity:1; color:var(--brass-light); }
 
   /* ============ HEADER / NAV ============ */
@@ -136,12 +137,12 @@
   }
   .nav-row{
     display:flex; align-items:center; justify-content:space-between;
-    padding:14px 0;
+    padding:10px 0;
   }
   .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; }
-  .brand-mark{ width:42px; height:42px; flex-shrink:0; }
+  .brand-mark{ width:38px; height:38px; flex-shrink:0; object-fit:contain; border-radius:50%; }
   .brand-text{ line-height:1.2; }
-  .brand-text strong{ display:block; font-family:'Fraunces',serif; font-size:1.05rem; font-weight:700; }
+  .brand-text strong{ display:block; font-family:'Fraunces',serif; font-size:1.02rem; font-weight:700; }
   .brand-text small{ display:block; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--brass-light); }
 
   nav.primary{ display:flex; align-items:center; gap:6px; }
@@ -189,7 +190,7 @@
     opacity:.15; animation:spin 120s linear infinite;
   }
   @keyframes spin{ to{ transform:rotate(360deg); } }
-  .hero-inner{ position:relative; display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:center; }
+  .hero-inner{ position:relative; display:grid; grid-template-columns:1.15fr .85fr; gap:48px; align-items:start; }
   .hero-eyebrow{
     color:var(--brass-light); text-transform:uppercase; letter-spacing:.16em;
     font-size:.75rem; font-weight:700; margin-bottom:18px; display:flex; gap:.6em; align-items:center;
@@ -588,17 +589,9 @@
 <header class="site">
   <div class="container nav-row">
     <a href="#inicio" class="brand">
-      <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="22" stroke="#E6C878" stroke-width="2"/>
-        <path d="M24 6 L27 22 L24 24 L21 22 Z" fill="#E6C878"/>
-        <path d="M24 42 L21 26 L24 24 L27 26 Z" fill="#5C7A96"/>
-        <path d="M6 24 L22 21 L24 24 L22 27 Z" fill="#5C7A96"/>
-        <path d="M42 24 L26 27 L24 24 L26 21 Z" fill="#5C7A96"/>
-        <circle cx="24" cy="24" r="3" fill="#fff"/>
-      </svg>
+      <img src="img/logo-liceo.png" alt="Escudo Liceo Almirante Riveros" class="brand-mark">
       <span class="brand-text">
         <strong>Liceo Almirante Riveros</strong>
-        <small>Conchalí · Región Metropolitana</small>
       </span>
     </a>
 
@@ -643,9 +636,9 @@
     <path d="M196 100 L104 108 L100 100 L104 92 Z" fill="#E6C878"/>
   </svg>
   <div class="container hero-inner">
-    <div class="reveal in">
-      <div class="hero-eyebrow">Liceo Almirante Riveros · Conchalí</div>
+    <div class="hero-eyebrow" style="grid-column:1/-1;">Liceo Almirante Riveros · Conchalí</div>
 
+    <div class="reveal in">
       <div class="hero-news" id="heroNews">
         <div class="hero-news-slide" id="heroNewsSlide">
           <div class="hero-news-content">
@@ -1021,14 +1014,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="brand" style="margin-bottom:14px;">
-          <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="22" stroke="#E6C878" stroke-width="2"/>
-            <path d="M24 6 L27 22 L24 24 L21 22 Z" fill="#E6C878"/>
-            <path d="M24 42 L21 26 L24 24 L27 26 Z" fill="#5C7A96"/>
-            <path d="M6 24 L22 21 L24 24 L22 27 Z" fill="#5C7A96"/>
-            <path d="M42 24 L26 27 L24 24 L26 21 Z" fill="#5C7A96"/>
-            <circle cx="24" cy="24" r="3" fill="#fff"/>
-          </svg>
+          <img src="img/logo-liceo.png" alt="Escudo Liceo Almirante Riveros" class="brand-mark">
           <strong style="font-family:'Fraunces',serif; color:#fff;">Liceo Almirante Riveros</strong>
         </div>
         <p>Establecimiento municipal científico-humanista, dependiente de la Corporación de Educación, Salud y Atención de Menores de Conchalí (CORESAM).</p>
