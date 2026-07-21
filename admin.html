@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel de administración | Liceo Almirante Riveros</title>
+<title>Panel de administración | Liceo Almirante Galvarino Riveros</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="firebase-config.js"></script>
@@ -124,7 +124,7 @@
         <circle cx="24" cy="24" r="3" fill="#0B2340"/>
       </svg>
       <div>
-        <h2>Liceo Almirante Riveros</h2>
+        <h2>Liceo Almirante Galvarino Riveros</h2>
         <p class="sub" style="margin:2px 0 0;">Panel de administración</p>
       </div>
     </div>
@@ -148,7 +148,7 @@
 <div id="adminScreen">
   <div class="topbar">
     <div>
-      <h1>Panel de administración — Liceo Almirante Riveros</h1>
+      <h1>Panel de administración — Liceo Almirante Galvarino Riveros</h1>
       <p id="sessionInfo">Conectando…</p>
     </div>
     <div class="topbar-actions">
@@ -245,7 +245,7 @@ Campeonato de fútbol | deportes | https://raw.githubusercontent.com/jorgelaciar
       <!-- VIDEOS -->
       <section class="panel" id="panel-videos">
         <h2>Videos institucionales</h2>
-        <p class="hint">Pega el link de YouTube tal cual lo copias de la barra de direcciones o del botón "Compartir" (funciona con youtube.com/watch?v=..., youtu.be/... y Shorts).</p>
+        <p class="hint">Pega un link de YouTube (recomendado — sube el video ahí como "No listado" si no quieres que sea público en tu canal), o el link directo de un archivo .mp4 subido a GitHub. Ojo: GitHub no acepta archivos de más de 100 MB, así que para videos largos o pesados, YouTube es más confiable.</p>
         <div id="videosList"></div>
         <button class="add-btn" data-add="videos">+ Agregar video</button>
       </section>
@@ -457,7 +457,7 @@ const listConfigs = {
     fields: [
       { key:'titulo', label:'Título del video', placeholder:'Acto de aniversario 2026', full:true },
       { key:'descripcion', label:'Descripción (opcional)', placeholder:'Breve descripción del video', textarea:true, full:true },
-      { key:'url', label:'Link de YouTube', placeholder:'https://www.youtube.com/watch?v=...', full:true },
+      { key:'url', label:'Link de YouTube o de archivo .mp4', placeholder:'https://www.youtube.com/watch?v=... o https://raw.githubusercontent.com/.../video.mp4', full:true },
     ],
     blank: () => ({ titulo:'', descripcion:'', url:'' }),
     title: (item, i) => item.titulo || `Video ${i+1}`
