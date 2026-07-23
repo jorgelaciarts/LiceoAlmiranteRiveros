@@ -312,9 +312,13 @@
     box-shadow:var(--shadow-card);
   }
   .news-thumb{
-    height:150px; background:linear-gradient(135deg, var(--navy-mid), var(--teal));
-    position:relative; display:flex; align-items:flex-end; padding:14px;
+    min-height:150px; background:linear-gradient(135deg, var(--navy-mid), var(--teal));
+    position:relative; display:flex; align-items:flex-end; padding:14px; overflow:hidden;
   }
+  .news-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:var(--navy-deep); }
+  .news-thumb.has-image{ height:auto; align-items:flex-start; padding:0; }
+  .news-thumb.has-image img{ position:static; width:100%; height:auto; max-height:220px; object-fit:cover; }
+  .news-thumb.has-image span{ position:absolute; left:14px; top:14px; }
   .news-thumb span{
     background:var(--brass); color:var(--navy-deep); font-weight:800; font-size:.7rem;
     text-transform:uppercase; letter-spacing:.08em; padding:5px 10px; border-radius:2px;
@@ -1259,7 +1263,7 @@ const newsGrid = document.getElementById('newsGrid');
 function renderNews(noticias){
   newsGrid.innerHTML = noticias.map(n => `
     <article class="news-card reveal in">
-      <div class="news-thumb" ${n.imagenUrl ? `style="background-image:url('${n.imagenUrl}');background-size:cover;background-position:center;"` : ''}><span>${n.categoria}</span></div>
+      <div class="news-thumb${n.imagenUrl ? ' has-image' : ''}">${n.imagenUrl ? `<img src="${n.imagenUrl}" alt="${n.titulo}" loading="lazy">` : ''}<span>${n.categoria}</span></div>
       <div class="news-body">
         <span class="news-date">${n.fecha}</span>
         <h3>${n.titulo}</h3>
