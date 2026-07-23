@@ -404,11 +404,12 @@ const listConfigs = {
       { key:'fecha', label:'Fecha', placeholder:'03 de julio, 2026' },
       { key:'categoria', label:'Categoría', placeholder:'Académico, Deportes, Convivencia…' },
       { key:'titulo', label:'Título', placeholder:'Título de la noticia', full:true },
-      { key:'resumen', label:'Resumen', placeholder:'Breve descripción', textarea:true, full:true },
-      { key:'enlace', label:'Enlace (opcional)', placeholder:'#' },
+      { key:'resumen', label:'Resumen (se ve en la tarjeta)', placeholder:'Breve descripción, 2-3 líneas', textarea:true, full:true },
+      { key:'contenido', label:'Contenido completo (opcional — si lo llenas, se puede leer entero en un visor)', placeholder:'Pega aquí el texto completo de la noticia o comunicado', textarea:true, full:true },
+      { key:'enlace', label:'Enlace externo (opcional, solo si no usas "Contenido completo")', placeholder:'#' },
       { key:'imagenUrl', label:'Foto (pega el link de GitHub, opcional)', placeholder:'img/noticia1.jpg', full:true },
     ],
-    blank: () => ({ fecha:'', categoria:'', titulo:'', resumen:'', enlace:'#', imagenUrl:'' }),
+    blank: () => ({ fecha:'', categoria:'', titulo:'', resumen:'', contenido:'', enlace:'#', imagenUrl:'' }),
     title: (item, i) => item.titulo || `Noticia ${i+1}`
   },
   galeria: {
