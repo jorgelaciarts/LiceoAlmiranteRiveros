@@ -397,6 +397,12 @@
     font-size:1.8rem; cursor:pointer; line-height:1;
   }
 
+  .news-modal-box{ overflow-y:auto; }
+  .news-modal-media{ width:100%; line-height:0; }
+  .news-modal-media img{ width:100%; height:auto; max-height:380px; object-fit:cover; display:block; }
+  #newsModalBody p{ margin:0 0 1em; }
+  #newsModalBody p:last-child{ margin-bottom:0; }
+
   /* ============ CALENDARIO ============ */
   .calendar-panel{
     background:var(--navy-deep); border-radius:6px; padding:30px; color:#fff;
@@ -1102,6 +1108,20 @@
   </div>
 </div>
 
+<!-- ============ VISOR DE NOTICIA COMPLETA ============ -->
+<div class="lightbox" id="newsModal">
+  <button class="lightbox-close" id="newsModalClose" aria-label="Cerrar">×</button>
+  <div class="lightbox-box news-modal-box">
+    <div class="news-modal-media" id="newsModalMedia"></div>
+    <div class="lightbox-info" style="padding:26px 28px 32px;">
+      <span class="hero-news-tag" id="newsModalTag"></span>
+      <span class="hero-news-date" id="newsModalDate"></span>
+      <h3 id="newsModalTitle" style="color:#fff; margin:12px 0 14px; font-size:1.4rem;"></h3>
+      <div id="newsModalBody" style="color:#D9E2ED; font-size:.96rem; line-height:1.7; white-space:pre-line;"></div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -1223,7 +1243,7 @@ document.getElementById('lightboxNext').addEventListener('click', () => {
 });
 document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
 lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('open'); });
-document.addEventListener('keydown', (e) => { if(e.key === 'Escape') lightbox.classList.remove('open'); });
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape'){ lightbox.classList.remove('open'); newsModal.classList.remove('open'); } });
 
 /* ===================== CALENDARIO DE EVALUACIONES ===================== */
 let evalData = [];
@@ -1260,18 +1280,45 @@ function renderStaff(staffData){
 
 /* ===================== NOTICIAS ===================== */
 const newsGrid = document.getElementById('newsGrid');
+let newsItems = [];
 function renderNews(noticias){
-  newsGrid.innerHTML = noticias.map(n => `
+  newsItems = noticias;
+  newsGrid.innerHTML = noticias.map((n, i) => `
     <article class="news-card reveal in">
       <div class="news-thumb${n.imagenUrl ? ' has-image' : ''}">${n.imagenUrl ? `<img src="${n.imagenUrl}" alt="${n.titulo}" loading="lazy">` : ''}<span>${n.categoria}</span></div>
       <div class="news-body">
         <span class="news-date">${n.fecha}</span>
         <h3>${n.titulo}</h3>
         <p>${n.resumen}</p>
-        <a href="${n.enlace}" class="news-link">Leer noticia completa →</a>
+        ${n.contenido
+          ? `<a href="#" class="news-link" data-news-index="${i}">Leer noticia completa →</a>`
+          : `<a href="${n.enlace}" class="news-link">Leer noticia completa →</a>`}
       </div>
     </article>`).join('');
 }
+
+const newsModal = document.getElementById('newsModal');
+function openNewsModal(n){
+  document.getElementById('newsModalTag').textContent = n.categoria || 'Noticias';
+  document.getElementById('newsModalDate').textContent = n.fecha ? ' · ' + n.fecha : '';
+  document.getElementById('newsModalTitle').textContent = n.titulo;
+  document.getElementById('newsModalBody').innerHTML = n.contenido
+    .split(/\n\s*\n/)
+    .map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`)
+    .join('');
+  document.getElementById('newsModalMedia').innerHTML = n.imagenUrl
+    ? `<img src="${n.imagenUrl}" alt="${n.titulo}">` : '';
+  newsModal.classList.add('open');
+}
+newsGrid.addEventListener('click', (e) => {
+  const link = e.target.closest('[data-news-index]');
+  if(!link) return;
+  e.preventDefault();
+  const item = newsItems[Number(link.dataset.newsIndex)];
+  if(item) openNewsModal(item);
+});
+document.getElementById('newsModalClose').addEventListener('click', () => newsModal.classList.remove('open'));
+newsModal.addEventListener('click', (e) => { if(e.target === newsModal) newsModal.classList.remove('open'); });
 
 /* ===================== VIDEOS ===================== */
 const videosGrid = document.getElementById('videosGrid');
@@ -1337,6 +1384,9 @@ function showHeroNewsSlide(i){
   const n = heroNewsItems[heroNewsIndex];
   const slide = document.getElementById('heroNewsSlide');
   const mediaHtml = n.imagenUrl ? `<div class="hero-news-media"><img src="${n.imagenUrl}" alt="${n.titulo}"></div>` : '';
+  const linkHtml = n.contenido
+    ? `<a href="#" class="hero-news-link" id="heroNewsReadMore">Leer noticia completa →</a>`
+    : `<a href="${n.enlace && n.enlace !== '#' ? n.enlace : '#noticias'}" class="hero-news-link">Leer noticia completa →</a>`;
   slide.className = 'hero-news-slide';
   slide.innerHTML = `
     ${mediaHtml}
@@ -1344,12 +1394,14 @@ function showHeroNewsSlide(i){
       <span class="hero-news-tag">${n.categoria || 'Noticias'}</span><span class="hero-news-date">${n.fecha || ''}</span>
       <h1 class="hero-news-title">${n.titulo}</h1>
       <p class="hero-news-excerpt">${n.resumen || ''}</p>
-      <a href="${n.enlace && n.enlace !== '#' ? n.enlace : '#noticias'}" class="hero-news-link">Leer noticia completa →</a>
+      ${linkHtml}
     </div>
   `;
   slide.style.animation = 'none';
   void slide.offsetWidth;
   slide.style.animation = '';
+  const readMoreBtn = document.getElementById('heroNewsReadMore');
+  if(readMoreBtn) readMoreBtn.addEventListener('click', (e) => { e.preventDefault(); openNewsModal(n); });
   document.querySelectorAll('#heroNewsDots button').forEach((dot, idx) => dot.classList.toggle('active', idx === heroNewsIndex));
 }
 
