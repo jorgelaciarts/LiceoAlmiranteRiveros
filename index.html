@@ -460,6 +460,20 @@
   @media (max-width:920px){ .staff-grid{ grid-template-columns:repeat(2,1fr); } }
 
   /* ============ DOCUMENTOS ============ */
+  .taller-grid-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .taller-card{
+    background:var(--paper-white); border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; box-shadow:var(--shadow-card); display:flex; flex-direction:column;
+  }
+  .taller-card-media{ width:100%; line-height:0; background:#000; }
+  .taller-card-media img{ width:100%; height:auto; max-height:200px; object-fit:contain; display:block; cursor:pointer; }
+  .taller-card-body{ padding:18px 20px 20px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .taller-card-body h3{ font-size:1rem; margin:0; }
+  .taller-card-body p{ font-size:.88rem; color:var(--ink-soft); margin:0; flex:1; }
+  .taller-card-body .doc-dl{ align-self:flex-start; margin-top:4px; }
+  @media (max-width:920px){ .taller-grid-cards{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:600px){ .taller-grid-cards{ grid-template-columns:1fr; } }
+
   .docs-list{ display:grid; gap:12px; }
   .doc-row{
     display:flex; align-items:center; gap:16px; background:var(--paper-white);
@@ -663,6 +677,7 @@
       <a href="#nosotros">Nosotros</a>
       <a href="#noticias">Noticias</a>
       <a href="#galeria">Galería</a>
+      <a href="#talleres">Talleres</a>
       <a href="#videos">Videos</a>
       <a href="#calendario">Calendario</a>
       <a href="#profesores">Profesores</a>
@@ -953,6 +968,18 @@
       <div class="taller reveal">🎺 Conchalí Big Band</div>
       <div class="taller reveal">🌱 Educación medioambiental</div>
     </div>
+  </div>
+</section>
+
+<!-- ============ TALLERES ============ -->
+<section class="section" id="talleres">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Formación complementaria</div>
+      <h2>Talleres</h2>
+      <p>Fotos, horarios y material de nuestros talleres extraprogramáticos.</p>
+    </div>
+    <div class="taller-grid-cards" id="talleresGrid"></div>
   </div>
 </section>
 
@@ -1418,6 +1445,24 @@ function renderDocs(documentos){
     </div>`).join('');
 }
 
+/* ===================== TALLERES ===================== */
+const talleresGrid = document.getElementById('talleresGrid');
+function renderTalleres(talleres){
+  if(!talleres.length){
+    talleresGrid.innerHTML = `<p style="color:var(--ink-soft);">Muy pronto vas a encontrar aquí fotos y material de nuestros talleres.</p>`;
+    return;
+  }
+  talleresGrid.innerHTML = talleres.map(t => `
+    <div class="taller-card reveal in">
+      ${t.imagenUrl ? `<div class="taller-card-media"><a href="${t.imagenUrl}" target="_blank" rel="noopener" title="Ver imagen completa"><img src="${t.imagenUrl}" alt="${t.nombre}" loading="lazy"></a></div>` : ''}
+      <div class="taller-card-body">
+        <h3>${t.nombre}</h3>
+        <p>${t.descripcion || ''}</p>
+        ${t.enlace ? `<a href="${t.enlace}" class="doc-dl" target="_blank" rel="noopener">Descargar</a>` : ''}
+      </div>
+    </div>`).join('');
+}
+
 /* ===================== BANNER DE NOTICIAS DESTACADAS (hero) ===================== */
 let heroNewsItems = [];
 let heroNewsIndex = 0;
@@ -1526,13 +1571,14 @@ async function loadContent(){
     ['tbYoutube','socialYoutube'].forEach(id => { const el=document.getElementById(id); if(el) el.href = r.youtube || '#'; });
 
     // Colecciones
-    const [noticias, galeria, calendario, profesores, documentos, videos] = await Promise.all([
+    const [noticias, galeria, calendario, profesores, documentos, videos, talleres] = await Promise.all([
       getCollectionData('noticias', 'createdAt'),
       getCollectionData('galeria', 'createdAt'),
       getCollectionData('calendario', 'createdAt'),
       getCollectionData('profesores', 'createdAt'),
       getCollectionData('documentos', 'createdAt'),
       getCollectionData('videos', 'createdAt'),
+      getCollectionData('talleres', 'createdAt'),
     ]);
 
     const noticiasOrdenadas = noticias.reverse();
@@ -1546,6 +1592,7 @@ async function loadContent(){
     renderCalendar('todos');
     renderStaff(profesores);
     renderDocs(documentos);
+    renderTalleres(talleres);
     renderVideos(videos.reverse());
 
     document.querySelectorAll('.reveal:not(.in)').forEach(el => revealObs.observe(el));
