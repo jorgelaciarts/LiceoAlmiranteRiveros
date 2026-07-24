@@ -320,6 +320,14 @@
   .news-thumb.has-image{ height:auto; align-items:flex-start; padding:0; background:#000; }
   .news-thumb.has-image img{ position:static; width:100%; height:auto; max-height:220px; object-fit:contain; }
   .news-thumb.has-image span{ position:absolute; left:14px; top:14px; }
+  .news-thumb.clickable{ cursor:pointer; }
+  .news-thumb.clickable::after{
+    content:"🔍 Ver completa"; position:absolute; inset:0; z-index:1;
+    background:rgba(11,35,64,.55); color:#fff; font-size:.82rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transition:opacity .18s ease;
+  }
+  .news-thumb.clickable:hover::after{ opacity:1; }
   .news-thumb span{
     background:var(--brass); color:var(--navy-deep); font-weight:800; font-size:.7rem;
     text-transform:uppercase; letter-spacing:.08em; padding:5px 10px; border-radius:2px;
@@ -1314,12 +1322,12 @@ function renderNews(noticias){
   newsItems = noticias;
   newsGrid.innerHTML = noticias.map((n, i) => `
     <article class="news-card reveal in">
-      <div class="news-thumb${n.imagenUrl ? ' has-image' : ''}">${n.imagenUrl ? `<img src="${n.imagenUrl}" alt="${n.titulo}" loading="lazy">` : ''}<span>${n.categoria}</span></div>
+      <div class="news-thumb${n.imagenUrl ? ' has-image clickable' : ''}" ${n.imagenUrl ? `data-news-index="${i}"` : ''}>${n.imagenUrl ? `<img src="${n.imagenUrl}" alt="${n.titulo}" loading="lazy">` : ''}<span>${n.categoria}</span></div>
       <div class="news-body">
         <span class="news-date">${n.fecha}</span>
         <h3>${n.titulo}</h3>
         <p>${n.resumen}</p>
-        ${n.contenido
+        ${n.contenido || n.imagenUrl
           ? `<a href="#" class="news-link" data-news-index="${i}">Leer noticia completa →</a>`
           : `<a href="${n.enlace}" class="news-link">Leer noticia completa →</a>`}
       </div>
@@ -1331,7 +1339,8 @@ function openNewsModal(n){
   document.getElementById('newsModalTag').textContent = n.categoria || 'Noticias';
   document.getElementById('newsModalDate').textContent = n.fecha ? ' · ' + n.fecha : '';
   document.getElementById('newsModalTitle').textContent = n.titulo;
-  document.getElementById('newsModalBody').innerHTML = n.contenido
+  const texto = n.contenido || n.resumen || '';
+  document.getElementById('newsModalBody').innerHTML = texto
     .split(/\n\s*\n/)
     .map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`)
     .join('');
@@ -1340,10 +1349,10 @@ function openNewsModal(n){
   newsModal.classList.add('open');
 }
 newsGrid.addEventListener('click', (e) => {
-  const link = e.target.closest('[data-news-index]');
-  if(!link) return;
+  const target = e.target.closest('[data-news-index]');
+  if(!target) return;
   e.preventDefault();
-  const item = newsItems[Number(link.dataset.newsIndex)];
+  const item = newsItems[Number(target.dataset.newsIndex)];
   if(item) openNewsModal(item);
 });
 document.getElementById('newsModalClose').addEventListener('click', () => newsModal.classList.remove('open'));
