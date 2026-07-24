@@ -165,6 +165,7 @@
       <button data-panel="redes">🔗 Redes sociales</button>
       <button data-panel="noticias">📰 Noticias</button>
       <button data-panel="galeria">🖼 Galería</button>
+      <button data-panel="talleres">🛠 Talleres</button>
       <button data-panel="videos">🎬 Videos</button>
       <button data-panel="calendario">🗓 Calendario</button>
       <button data-panel="profesores">🎓 Profesores</button>
@@ -253,6 +254,14 @@ Campeonato de fútbol | deportes | https://raw.githubusercontent.com/jorgelaciar
 
         <div id="galeriaList"></div>
         <button class="add-btn" data-add="galeria">+ Agregar foto</button>
+      </section>
+
+      <!-- TALLERES -->
+      <section class="panel" id="panel-talleres">
+        <h2>Talleres</h2>
+        <p class="hint">Cada taller puede tener una foto, un documento (horario, folleto), o ambos — deja el campo vacío si no aplica.</p>
+        <div id="talleresList"></div>
+        <button class="add-btn" data-add="talleres">+ Agregar taller</button>
       </section>
 
       <!-- VIDEOS -->
@@ -477,6 +486,17 @@ const listConfigs = {
     ],
     blank: () => ({ titulo:'', descripcion:'', url:'' }),
     title: (item, i) => item.titulo || `Video ${i+1}`
+  },
+  talleres: {
+    container: 'talleresList', empty: 'Aún no hay talleres registrados.',
+    fields: [
+      { key:'nombre', label:'Nombre del taller', placeholder:'Taller de danza', full:true },
+      { key:'descripcion', label:'Descripción (opcional)', placeholder:'Breve descripción del taller', textarea:true, full:true },
+      { key:'imagenUrl', label:'Foto (opcional, link de GitHub)', placeholder:'img/taller-danza.jpg', full:true },
+      { key:'enlace', label:'Documento (opcional, link de GitHub — horario, folleto, etc.)', placeholder:'documentos/horario-talleres.pdf', full:true },
+    ],
+    blank: () => ({ nombre:'', descripcion:'', imagenUrl:'', enlace:'' }),
+    title: (item, i) => item.nombre || `Taller ${i+1}`
   },
 };
 
