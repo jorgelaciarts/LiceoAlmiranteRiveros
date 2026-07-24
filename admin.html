@@ -160,6 +160,7 @@
   <div class="layout">
     <nav class="sidebar" id="sidebar">
       <button data-panel="aviso" class="active">📣 Aviso</button>
+      <button data-panel="postulaciones">🎓 Postulaciones</button>
       <button data-panel="contacto">📍 Contacto</button>
       <button data-panel="redes">🔗 Redes sociales</button>
       <button data-panel="noticias">📰 Noticias</button>
@@ -185,6 +186,18 @@
           <div class="field">
             <label for="aviso">Texto del aviso</label>
             <textarea id="aviso" placeholder="Ej: Reunión de apoderados: martes 15 de julio, 18:30 hrs."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- POSTULACIONES -->
+      <section class="panel" id="panel-postulaciones">
+        <h2>Postulaciones</h2>
+        <p class="hint">Sube el PDF con la información de postulación a tu repositorio (por ejemplo en <code>/documentos</code>) y pega aquí el link. Aparece como una tarjeta destacada en la sección de Preguntas Frecuentes del sitio. Si dejas este campo vacío, la tarjeta no se muestra.</p>
+        <div class="card">
+          <div class="field">
+            <label for="postulacionesPdf">Link del PDF de información de postulación</label>
+            <input type="text" id="postulacionesPdf" placeholder="documentos/postulaciones-2027.pdf">
           </div>
         </div>
       </section>
@@ -353,6 +366,7 @@ function debounce(fn, ms){
 const settingsRef = doc(db, 'settings', 'site');
 const simpleFieldMap = {
   'aviso': ['aviso'],
+  'postulacionesPdf': ['postulacionesPdf'],
   'c-direccion': ['contacto','direccion'],
   'c-telefono': ['contacto','telefono'],
   'c-correo': ['contacto','correo'],
@@ -385,6 +399,7 @@ async function loadSettings(){
   const snap = await getDoc(settingsRef);
   const data = snap.exists() ? snap.data() : {};
   document.getElementById('aviso').value = data.aviso || '';
+  document.getElementById('postulacionesPdf').value = data.postulacionesPdf || '';
   const c = data.contacto || {};
   document.getElementById('c-direccion').value = c.direccion || '';
   document.getElementById('c-telefono').value = c.telefono || '';
