@@ -619,6 +619,14 @@
   }
   .to-top.show{ opacity:1; pointer-events:auto; }
 
+  .whatsapp-float{
+    position:fixed; left:22px; bottom:22px; width:54px; height:54px; border-radius:50%;
+    background:#25D366; color:#fff; text-decoration:none;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.3); z-index:80; transition:transform .18s ease;
+  }
+  .whatsapp-float:hover{ transform:scale(1.08); }
+
   @media (max-width:920px){
     .about-grid{ grid-template-columns:1fr; }
     .news-grid{ grid-template-columns:1fr 1fr; }
@@ -1154,6 +1162,10 @@
   </div>
 </footer>
 
+<a href="#" id="whatsappFloat" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp" style="display:none;">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2.05 22l5.25-1.38a9.9 9.9 0 004.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0012.04 2zm5.8 14.16c-.24.68-1.4 1.31-1.94 1.35-.5.05-1.02.24-3.4-.71-2.87-1.15-4.7-4.06-4.85-4.25-.14-.19-1.16-1.54-1.16-2.94 0-1.4.73-2.08 1-2.37.24-.27.53-.33.71-.33.18 0 .35 0 .5.01.16.01.38-.06.6.45.24.56.79 1.94.86 2.08.07.14.11.3.02.48-.09.19-.14.3-.27.46-.14.17-.28.37-.4.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.93 1.93 1.22 2.21 1.36.28.14.44.12.6-.07.16-.2.7-.81.88-1.09.19-.28.37-.23.62-.14.26.09 1.63.77 1.9.91.28.14.46.21.53.33.07.12.07.68-.17 1.35z"/></svg>
+</a>
+
 <button class="to-top" id="toTop" aria-label="Volver arriba">↑</button>
 
 <!-- lightbox -->
@@ -1558,6 +1570,13 @@ async function loadContent(){
     if(tbDireccionLink && c.direccion) tbDireccionLink.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.direccion);
     const tbTelefonoLink = document.getElementById('tbTelefonoLink');
     if(tbTelefonoLink && c.telefono) tbTelefonoLink.href = 'tel:' + c.telefono.replace(/[^\d+]/g, '');
+
+    const whatsappFloat = document.getElementById('whatsappFloat');
+    if(whatsappFloat && c.whatsapp){
+      const numero = c.whatsapp.replace(/[^\d]/g, '');
+      whatsappFloat.href = 'https://wa.me/' + numero;
+      whatsappFloat.style.display = 'flex';
+    }
     const tbCorreoLink = document.getElementById('tbCorreoLink');
     if(tbCorreoLink && c.correo) tbCorreoLink.href = 'mailto:' + c.correo;
     const horarioEl = document.getElementById('contactHorario'); if(horarioEl) horarioEl.textContent = c.horario || '';
