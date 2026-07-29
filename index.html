@@ -688,6 +688,7 @@
       <a href="#talleres">Talleres</a>
       <a href="#videos">Videos</a>
       <a href="#calendario">Calendario</a>
+      <a href="#simce">Simce</a>
       <a href="#profesores">Profesores</a>
       <a href="#documentos">Documentos</a>
       <a href="#contacto">Contacto</a>
@@ -988,6 +989,18 @@
       <p>Fotos, horarios y material de nuestros talleres extraprogramáticos.</p>
     </div>
     <div class="taller-grid-cards" id="talleresGrid"></div>
+  </div>
+</section>
+
+<!-- ============ SIMCE ============ -->
+<section class="section" id="simce">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Resultados académicos</div>
+      <h2>Simce</h2>
+      <p>Resultados de la Medición Nacional de la Calidad de la Educación (Simce) de nuestro liceo.</p>
+    </div>
+    <div class="docs-list" id="simceList"></div>
   </div>
 </section>
 
@@ -1475,6 +1488,21 @@ function renderTalleres(talleres){
     </div>`).join('');
 }
 
+/* ===================== SIMCE ===================== */
+const simceList = document.getElementById('simceList');
+function renderSimce(simce){
+  if(!simce.length){
+    simceList.innerHTML = `<p style="color:var(--ink-soft);">Aún no hay resultados Simce publicados.</p>`;
+    return;
+  }
+  simceList.innerHTML = simce.map(s => `
+    <div class="doc-row reveal in">
+      <div class="doc-ico">${docIcon}</div>
+      <div class="doc-meta"><strong>${s.nombre}</strong><span>${s.detalle}</span></div>
+      <a href="${s.enlace}" class="doc-dl" target="_blank" rel="noopener">Descargar</a>
+    </div>`).join('');
+}
+
 /* ===================== BANNER DE NOTICIAS DESTACADAS (hero) ===================== */
 let heroNewsItems = [];
 let heroNewsIndex = 0;
@@ -1590,7 +1618,7 @@ async function loadContent(){
     ['tbYoutube','socialYoutube'].forEach(id => { const el=document.getElementById(id); if(el) el.href = r.youtube || '#'; });
 
     // Colecciones
-    const [noticias, galeria, calendario, profesores, documentos, videos, talleres] = await Promise.all([
+    const [noticias, galeria, calendario, profesores, documentos, videos, talleres, simce] = await Promise.all([
       getCollectionData('noticias', 'createdAt'),
       getCollectionData('galeria', 'createdAt'),
       getCollectionData('calendario', 'createdAt'),
@@ -1598,6 +1626,7 @@ async function loadContent(){
       getCollectionData('documentos', 'createdAt'),
       getCollectionData('videos', 'createdAt'),
       getCollectionData('talleres', 'createdAt'),
+      getCollectionData('simce', 'createdAt'),
     ]);
 
     const noticiasOrdenadas = noticias.reverse();
@@ -1612,6 +1641,7 @@ async function loadContent(){
     renderStaff(profesores);
     renderDocs(documentos);
     renderTalleres(talleres);
+    renderSimce(simce);
     renderVideos(videos.reverse());
 
     document.querySelectorAll('.reveal:not(.in)').forEach(el => revealObs.observe(el));
