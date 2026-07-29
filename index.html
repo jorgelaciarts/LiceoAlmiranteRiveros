@@ -1000,7 +1000,7 @@
       <h2>Simce</h2>
       <p>Resultados de la Medición Nacional de la Calidad de la Educación (Simce) de nuestro liceo.</p>
     </div>
-    <div class="docs-list" id="simceList"></div>
+    <div class="taller-grid-cards" id="simceList"></div>
   </div>
 </section>
 
@@ -1496,10 +1496,13 @@ function renderSimce(simce){
     return;
   }
   simceList.innerHTML = simce.map(s => `
-    <div class="doc-row reveal in">
-      <div class="doc-ico">${docIcon}</div>
-      <div class="doc-meta"><strong>${s.nombre}</strong><span>${s.detalle}</span></div>
-      <a href="${s.enlace}" class="doc-dl" target="_blank" rel="noopener">Descargar</a>
+    <div class="taller-card reveal in">
+      ${s.imagenUrl ? `<div class="taller-card-media"><a href="${s.imagenUrl}" target="_blank" rel="noopener" title="Ver imagen completa"><img src="${s.imagenUrl}" alt="${s.nombre}" loading="lazy"></a></div>` : ''}
+      <div class="taller-card-body">
+        <h3>${s.nombre}</h3>
+        <p>${s.detalle || ''}</p>
+        ${s.enlace && s.enlace !== '#' ? `<a href="${s.enlace}" class="doc-dl" target="_blank" rel="noopener">Descargar</a>` : ''}
+      </div>
     </div>`).join('');
 }
 
