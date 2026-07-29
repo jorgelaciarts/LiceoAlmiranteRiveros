@@ -494,9 +494,10 @@ const listConfigs = {
     fields: [
       { key:'nombre', label:'Nombre', placeholder:'Resultados Simce 2026', full:true },
       { key:'detalle', label:'Detalle', placeholder:'2° Medio · PDF' },
-      { key:'enlace', label:'Enlace o ruta del archivo', placeholder:'documentos/simce-2026.pdf' },
+      { key:'enlace', label:'Enlace o ruta del archivo (opcional)', placeholder:'documentos/simce-2026.pdf' },
+      { key:'imagenUrl', label:'Foto (opcional, link de GitHub)', placeholder:'img/simce-grafico.jpg', full:true },
     ],
-    blank: () => ({ nombre:'', detalle:'', enlace:'#' }),
+    blank: () => ({ nombre:'', detalle:'', enlace:'#', imagenUrl:'' }),
     title: (item, i) => item.nombre || `Resultado ${i+1}`
   },
   videos: {
