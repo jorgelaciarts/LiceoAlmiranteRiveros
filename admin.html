@@ -170,6 +170,7 @@
       <button data-panel="calendario">🗓 Calendario</button>
       <button data-panel="profesores">🎓 Profesores</button>
       <button data-panel="documentos">📄 Documentos</button>
+      <button data-panel="simce">📊 Simce</button>
     </nav>
 
     <div class="content">
@@ -295,6 +296,14 @@ Campeonato de fútbol | deportes | https://raw.githubusercontent.com/jorgelaciar
         <p class="hint">Sube el PDF a tu repositorio (por ejemplo en <code>/documentos</code>) y pega aquí la ruta o enlace.</p>
         <div id="documentosList"></div>
         <button class="add-btn" data-add="documentos">+ Agregar documento</button>
+      </section>
+
+      <!-- SIMCE -->
+      <section class="panel" id="panel-simce">
+        <h2>Resultados Simce</h2>
+        <p class="hint">Sube el PDF de resultados a tu repositorio (por ejemplo en <code>/documentos</code>) y pega aquí el link. Recomendación: agrega uno por año.</p>
+        <div id="simceList"></div>
+        <button class="add-btn" data-add="simce">+ Agregar resultado</button>
       </section>
 
     </div>
@@ -479,6 +488,16 @@ const listConfigs = {
     ],
     blank: () => ({ nombre:'', detalle:'', enlace:'#' }),
     title: (item, i) => item.nombre || `Documento ${i+1}`
+  },
+  simce: {
+    container: 'simceList', empty: 'Aún no hay resultados Simce registrados.',
+    fields: [
+      { key:'nombre', label:'Nombre', placeholder:'Resultados Simce 2026', full:true },
+      { key:'detalle', label:'Detalle', placeholder:'2° Medio · PDF' },
+      { key:'enlace', label:'Enlace o ruta del archivo', placeholder:'documentos/simce-2026.pdf' },
+    ],
+    blank: () => ({ nombre:'', detalle:'', enlace:'#' }),
+    title: (item, i) => item.nombre || `Resultado ${i+1}`
   },
   videos: {
     container: 'videosList', empty: 'Aún no hay videos registrados.',
