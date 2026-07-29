@@ -214,6 +214,7 @@
             <div class="field"><label for="c-correo">Correo electrónico</label><input id="c-correo" type="email" placeholder="contacto@liceo.cl"></div>
           </div>
           <div class="field"><label for="c-horario">Horario de atención</label><input id="c-horario" placeholder="Lunes a viernes, 8:00–17:00 hrs"></div>
+          <div class="field"><label for="c-whatsapp">WhatsApp (solo el número, con código de país, sin espacios ni +)</label><input id="c-whatsapp" placeholder="56947186768"></div>
         </div>
       </section>
 
@@ -380,6 +381,7 @@ const simpleFieldMap = {
   'c-telefono': ['contacto','telefono'],
   'c-correo': ['contacto','correo'],
   'c-horario': ['contacto','horario'],
+  'c-whatsapp': ['contacto','whatsapp'],
   'r-facebook': ['redes','facebook'],
   'r-instagram': ['redes','instagram'],
   'r-youtube': ['redes','youtube'],
@@ -414,6 +416,7 @@ async function loadSettings(){
   document.getElementById('c-telefono').value = c.telefono || '';
   document.getElementById('c-correo').value = c.correo || '';
   document.getElementById('c-horario').value = c.horario || '';
+  document.getElementById('c-whatsapp').value = c.whatsapp || '';
   const r = data.redes || {};
   document.getElementById('r-facebook').value = r.facebook || '';
   document.getElementById('r-instagram').value = r.instagram || '';
