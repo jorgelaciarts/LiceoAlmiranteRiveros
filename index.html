@@ -145,7 +145,10 @@
     padding:10px 0;
   }
   .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; }
-  .brand-mark{ width:40px; height:44px; flex-shrink:0; object-fit:contain; }
+  .brand-mark{
+    width:62px; height:62px; flex-shrink:0; border-radius:50%;
+    object-fit:cover; background:#fff; border:2px solid rgba(255,255,255,.25);
+  }
   .brand-text{ line-height:1.2; }
   .brand-text strong{ display:block; font-family:'Fraunces',serif; font-size:1.02rem; font-weight:700; }
   .brand-text small{ display:block; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--brass-light); }
