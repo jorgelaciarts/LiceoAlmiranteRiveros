@@ -526,6 +526,15 @@
   .postulaciones-text strong{ display:block; font-family:'Fraunces',serif; font-size:1.05rem; }
   .postulaciones-text span{ font-size:.85rem; color:#B9C6D6; }
 
+  .infografias-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:44px; }
+  .infografia-card{
+    display:block; border-radius:8px; overflow:hidden; border:1px solid var(--line);
+    box-shadow:var(--shadow-card); line-height:0; transition:transform .18s ease;
+  }
+  .infografia-card:hover{ transform:translateY(-3px); }
+  .infografia-card img{ width:100%; height:auto; display:block; }
+  @media (max-width:700px){ .infografias-grid{ grid-template-columns:1fr; } }
+
   .faq-item{ border-bottom:1px solid var(--line); }
   .faq-q{
     width:100%; text-align:left; background:none; border:none; cursor:pointer;
@@ -1054,6 +1063,18 @@
       <p style="font-weight:600; color:var(--navy-deep);">Descubre todos nuestros talleres extra programáticos.</p>
     </div>
     <div class="taller-grid-cards" id="postulacionesTalleresGrid" style="margin-bottom:44px;"></div>
+
+    <div class="section-head reveal">
+      <p style="font-weight:600; color:var(--navy-deep);">Lo más importante del proceso de admisión, en dos infografías.</p>
+    </div>
+    <div class="infografias-grid">
+      <a href="img/infografia-fechas-importantes.png" target="_blank" rel="noopener" class="infografia-card">
+        <img src="img/infografia-fechas-importantes.png" alt="Fechas importantes del proceso de admisión 2027" loading="lazy">
+      </a>
+      <a href="img/infografia-como-postular.png" target="_blank" rel="noopener" class="infografia-card">
+        <img src="img/infografia-como-postular.png" alt="Cómo postular en el Sistema de Admisión Escolar" loading="lazy">
+      </a>
+    </div>
 
     <div id="faqList">
       <div class="faq-item">
