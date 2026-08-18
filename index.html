@@ -160,6 +160,11 @@
   }
   nav.primary a:hover{ color:#fff; }
   nav.primary a.active{ color:var(--brass-light); }
+  nav.primary a.nav-cta-link{
+    background:var(--brass); color:var(--navy-deep); font-weight:700;
+    padding:8px 16px; border-radius:999px; margin:0 2px;
+  }
+  nav.primary a.nav-cta-link:hover{ background:var(--brass-light); color:var(--navy-deep); }
 
   .nav-cta{ display:flex; align-items:center; gap:10px; }
   .menu-toggle{
@@ -177,7 +182,6 @@
     nav.primary.open{ transform:translateX(0); }
     nav.primary a{ padding:16px 12px; font-size:1.05rem; border-bottom:1px solid rgba(255,255,255,.08); }
     .menu-toggle{ display:block; }
-    .nav-cta .btn-brass{ display:none; }
   }
 
   /* ============ ALERT RIBBON ============ */
@@ -684,21 +688,19 @@
 
     <nav class="primary" id="primaryNav" aria-label="Navegación principal">
       <a href="#inicio">Inicio</a>
-      <a href="#redes">Redes sociales</a>
       <a href="#nosotros">Nosotros</a>
+      <a href="#postulaciones" class="btn btn-brass nav-cta-link">Proceso de matrícula abierto</a>
+      <a href="#redes">Redes sociales</a>
       <a href="#noticias">Noticias</a>
-      <a href="#galeria">Galería</a>
       <a href="#talleres">Talleres</a>
-      <a href="#videos">Videos</a>
-      <a href="#calendario">Calendario</a>
-      <a href="#simce">Simce</a>
-      <a href="#profesores">Profesores</a>
+      <a href="#galeria">Galería</a>
+      <a href="#calendario">Calendario de evaluaciones</a>
+      <a href="#profesores">Docentes y Asistentes de la Educación</a>
       <a href="#documentos">Documentos</a>
       <a href="#contacto">Contacto</a>
     </nav>
 
     <div class="nav-cta">
-      <a href="#postulaciones" class="btn btn-brass">Postulaciones</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="primaryNav">☰</button>
     </div>
   </div>
@@ -963,7 +965,7 @@
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Nuestro equipo</div>
-      <h2>Cuerpo docente y profesionales de apoyo</h2>
+      <h2>Docentes y Asistentes de la Educación</h2>
       <p>Un equipo comprometido con el aprendizaje y el bienestar de cada estudiante.</p>
     </div>
     <div class="staff-grid" id="staffGrid"></div>
