@@ -1050,6 +1050,11 @@
       <a href="#" id="postulacionesLink" class="btn btn-brass" target="_blank" rel="noopener">Descargar</a>
     </div>
 
+    <div class="section-head reveal" style="margin-top:44px;">
+      <p style="font-weight:600; color:var(--navy-deep);">Descubre todos nuestros talleres extra programáticos.</p>
+    </div>
+    <div class="taller-grid-cards" id="postulacionesTalleresGrid" style="margin-bottom:44px;"></div>
+
     <div id="faqList">
       <div class="faq-item">
         <button class="faq-q">¿Cómo postulo a una vacante? <span class="plus">+</span></button>
@@ -1486,12 +1491,10 @@ function renderDocs(documentos){
 
 /* ===================== TALLERES ===================== */
 const talleresGrid = document.getElementById('talleresGrid');
+const postulacionesTalleresGrid = document.getElementById('postulacionesTalleresGrid');
 function renderTalleres(talleres){
-  if(!talleres.length){
-    talleresGrid.innerHTML = `<p style="color:var(--ink-soft);">Muy pronto vas a encontrar aquí fotos y material de nuestros talleres.</p>`;
-    return;
-  }
-  talleresGrid.innerHTML = talleres.map(t => `
+  const emptyHtml = `<p style="color:var(--ink-soft);">Muy pronto vas a encontrar aquí fotos y material de nuestros talleres.</p>`;
+  const html = talleres.length ? talleres.map(t => `
     <div class="taller-card reveal in">
       ${t.imagenUrl ? `<div class="taller-card-media"><a href="${t.imagenUrl}" target="_blank" rel="noopener" title="Ver imagen completa"><img src="${t.imagenUrl}" alt="${t.nombre}" loading="lazy"></a></div>` : ''}
       <div class="taller-card-body">
@@ -1499,7 +1502,9 @@ function renderTalleres(talleres){
         <p>${t.descripcion || ''}</p>
         ${t.enlace ? `<a href="${t.enlace}" class="doc-dl" target="_blank" rel="noopener">Descargar</a>` : ''}
       </div>
-    </div>`).join('');
+    </div>`).join('') : emptyHtml;
+  talleresGrid.innerHTML = html;
+  if(postulacionesTalleresGrid) postulacionesTalleresGrid.innerHTML = html;
 }
 
 /* ===================== SIMCE ===================== */
